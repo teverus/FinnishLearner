@@ -14,7 +14,7 @@ from Code.ui_functions import (
 )
 
 
-class StartARun:
+class PracticeWords:
     def __init__(self, words_per_run):
         self.words_per_run = words_per_run
         self.snapshot = get_all_words()
@@ -105,4 +105,4 @@ class StartARun:
 
 
 if __name__ == "__main__":
-    StartARun(None)
+    PracticeWords(None)

@@ -1,7 +1,8 @@
 from Code.TeverusSDK.CLI_tools.table import Table
 from Code.constants import CONFIG, Settings, WELCOME_MESSAGE, SCREEN_WIDTH
 from Code.modules.change_settings import ChangeSettings
-from Code.modules.start_application import StartARun
+from Code.modules.practice_sentences import PracticeSentences
+from Code.modules.practice_words import PracticeWords
 from Code.ui_functions import (
     get_user_choice,
     clear_console,
@@ -16,8 +17,9 @@ class FinnishWordsLearner:
         self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
 
         self.options = {
-            "1": StartARun,
-            "2": ChangeSettings,
+            "1": PracticeWords,
+            "2": PracticeSentences,
+            "3": ChangeSettings,
             "0": exit,
             "00": self.show_welcome_screen,
         }
