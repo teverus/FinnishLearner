@@ -75,4 +75,3 @@ config.read(SETTINGS_FILE)
 
 CONFIG_PARSER = config
 CONFIG = config[SETTINGS]
-a = 1
