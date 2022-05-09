@@ -13,6 +13,7 @@ class FinnishWordsLearner:
         super(FinnishWordsLearner, self).__init__()
 
         self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
+        self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
 
         self.options = {
             "1": StartARun,
@@ -25,6 +26,8 @@ class FinnishWordsLearner:
 
         while True:
             self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
+            self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
+
             choice = self.options[choice]() if choice in ["0", "00"] else choice
 
             module = self.options[choice](self.words_per_run)
@@ -34,9 +37,14 @@ class FinnishWordsLearner:
         clear_console()
         available_options = Table(
             table_title=WELCOME_MESSAGE,
-            headers=["Option", "Words to practice"],
+            headers=["Option", "Words/sentences to practice"],
             headers_centered=True,
-            rows=[["Start a run", self.words_per_run], ["Settings"], ["Exit"]],
+            rows=[
+                ["Practice words", self.words_per_run],
+                ["Practice sentences", self.sentences_per_run],
+                ["Settings"],
+                ["Exit"],
+            ],
             custom_index={"Exit": 0},
             rows_centered=True,
             table_width=SCREEN_WIDTH,

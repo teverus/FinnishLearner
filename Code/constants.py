@@ -22,6 +22,7 @@ COUNT = "Count"
 
 class Settings:
     WORDS_PER_RUN = "words per run"
+    SENTENCES_PER_RUN = "sentences per run"
 
 
 class Statistics:
