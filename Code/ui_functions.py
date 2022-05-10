@@ -79,11 +79,11 @@ def get_user_choice(available_options: List[str]) -> str:
     return user_choice
 
 
-def show_run_statistics(stats: dict):
+def show_run_statistics(stats: dict, max_elements: str):
     correct = stats[Statistics.CORRECT]
     incorrect = stats[Statistics.INCORRECT]
     total = correct + incorrect
-    words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
+    words_per_run = int(CONFIG[max_elements])
 
     try:
         correct_percentage = round(correct / total * 100)
@@ -129,13 +129,14 @@ def get_longest_total_number(stats: dict) -> int:
     return len(str(max(max_number))) + 1
 
 
-def show_title_head(self):
+def show_title_head(index, max_index, element_type, user_tips=True):
     os.system("cls")
     create_a_border("=")
-    current_statistics = f"WORD {self.index:02} OF {self.words_per_run:02}".center(22)
+    current_statistics = f"{element_type} {index:02} OF {max_index:02}".center(22)
     print(f"{'-' * 22}|{current_statistics}|{'-' * 23}")
     create_a_border("=")
-    print(USER_TIPS.center(SCREEN_WIDTH))
+    if user_tips:
+        print(USER_TIPS.center(SCREEN_WIDTH))
     print(TRANSFORMATION.center(SCREEN_WIDTH))
     create_a_border()
 

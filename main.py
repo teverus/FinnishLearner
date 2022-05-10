@@ -2,6 +2,7 @@ from Code.constants import CONFIG, Settings, WELCOME_MESSAGE, SCREEN_WIDTH
 from Code.modules.change_settings import ChangeSettings
 from Code.modules.practice_sentences import PracticeSentences
 from Code.modules.practice_words import PracticeWords
+from Code.table import Table
 from Code.ui_functions import (
     get_user_choice,
     clear_console,
@@ -23,6 +24,11 @@ class FinnishWordsLearner:
             "00": self.show_welcome_screen,
         }
 
+        self.stats = {
+            "1": self.words_per_run,
+            "2": self.sentences_per_run,
+        }
+
         choice = self.show_welcome_screen()
 
         while True:
@@ -31,7 +37,7 @@ class FinnishWordsLearner:
 
             choice = self.options[choice]() if choice in ["0", "00"] else choice
 
-            module = self.options[choice](self.words_per_run)
+            module = self.options[choice](self.stats[choice])
             choice = module.result
 
     def show_welcome_screen(self):

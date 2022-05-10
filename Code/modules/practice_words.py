@@ -32,8 +32,8 @@ class PracticeWords:
             self.index = index
             get_random_word(self)
 
-            show_title_head(self)
-            show_run_statistics(self.stats)
+            show_title_head(index, self.words_per_run, "WORD")
+            show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
             show_word_tiers(self.stats)
 
             print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
@@ -84,7 +84,7 @@ class PracticeWords:
 
     def show_results(self):
         create_a_title("Your results")
-        show_run_statistics(self.stats)
+        show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
 
         if self.incorrect_answers:
             incorrect_answers = [

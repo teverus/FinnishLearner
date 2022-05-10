@@ -28,7 +28,11 @@ class ChangeSettings:
             border_rows_bottom="=",
         ).available_options
 
-        options = {"1": self.change_setting, "2": self.reset_scores}
+        options = {
+            "1": self.change_setting,
+            "2": self.change_setting,
+            "3": self.reset_scores,
+        }
 
         while True:
             user_choice = get_user_choice(available_options)
