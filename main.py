@@ -1,4 +1,3 @@
-from Code.TeverusSDK.CLI_tools.table import Table
 from Code.constants import CONFIG, Settings, WELCOME_MESSAGE, SCREEN_WIDTH
 from Code.modules.change_settings import ChangeSettings
 from Code.modules.practice_sentences import PracticeSentences
