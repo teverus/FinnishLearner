@@ -1,6 +1,6 @@
 from Code.constants import *
 from Code.db_functions import get_all_words
-from Code.table import Table
+from Code.Table import Table
 from Code.ui_functions import (
     get_user_choice,
     print_a_message,

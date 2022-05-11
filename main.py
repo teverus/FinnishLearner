@@ -2,7 +2,7 @@ from Code.constants import CONFIG, Settings, WELCOME_MESSAGE, SCREEN_WIDTH
 from Code.modules.change_settings import ChangeSettings
 from Code.modules.practice_sentences import PracticeSentences
 from Code.modules.practice_words import PracticeWords
-from Code.table import Table
+from Code.Table import Table
 from Code.ui_functions import (
     get_user_choice,
     clear_console,
