@@ -8,8 +8,26 @@ COMPOUND_NOMINAL = "Compound nominal"
 SUBJECT = "Subject"
 LINK_VERB = "Link verb"
 PREDICATE = "Predicate"
+DETACHED_WORD = "Detached word"
 
 # === Parts of speech ==================================================================
+ADJECTIVE = "Adjective"
 BE_FORM = "Be form"
-NOUN_PERSONAL = "Noun personal"
+INTERJECTION = "Interjection"
 PRONOUN_PERSONAL = "Pronoun personal"
+
+# === Construction characteristics =====================================================
+STATUS = "Status"
+OPTIONS = "Options"
+
+
+class Status:
+    REQUIRED = "Required"
+    OPTIONAL = "Optional"
+
+
+# === Be forms =========================================================================
+BE_FORMS = {
+    "minä": "olen",
+    "sinä": "olet"
+}

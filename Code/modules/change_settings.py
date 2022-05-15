@@ -9,7 +9,7 @@ from Code.ui_functions import (
 
 
 class ChangeSettings:
-    def __init__(self, _):
+    def __init__(self, *args):
         self.result = None
         self.run()
 
@@ -73,4 +73,4 @@ class ChangeSettings:
 
 
 if __name__ == "__main__":
-    ChangeSettings(None)
+    ChangeSettings()

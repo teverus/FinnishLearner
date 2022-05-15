@@ -27,6 +27,7 @@ class FinnishWordsLearner:
         self.stats = {
             "1": self.words_per_run,
             "2": self.sentences_per_run,
+            "3": None
         }
 
         choice = self.show_welcome_screen()
