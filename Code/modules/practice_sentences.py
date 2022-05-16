@@ -1,7 +1,7 @@
 import random
 
 from Code.constants import Statistics, Settings, ALL_WORDS_SENTENCES, PART_OF_SPEECH
-from Code.db_functions import get_all_words
+from Code.db_functions import get_all_words, export_constructions
 from Code.grammar_functions import get_all_constructions
 from Code.ui_functions import show_title_head, show_run_statistics
 
@@ -12,7 +12,7 @@ class PracticeSentences:
         self.stats = {Statistics.CORRECT: 0, Statistics.INCORRECT: 0}
         self.all_words = get_all_words(ALL_WORDS_SENTENCES, sort_by=PART_OF_SPEECH)
         self.constructions = get_all_constructions()
-        # создавать файлик, где показывается, какие есть конструкции
+        export_constructions(self.constructions)
         self.run()
 
     def run(self):

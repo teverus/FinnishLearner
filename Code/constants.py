@@ -16,6 +16,8 @@ TRANSFORMATION = """a: -> ä | o: -> ö | q -> end run | r -> start a new run"""
 
 ALL_WORDS = "all_words.xlsx"
 ALL_WORDS_SENTENCES = "all_words_sentences.xlsx"
+ALL_CONSTRUCTIONS = "all_constructions.xlsx"
+
 SCORE = "Score"
 COUNT = "Count"
 PART_OF_SPEECH = "PartOfSpeech"

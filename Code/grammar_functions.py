@@ -5,7 +5,7 @@ from Code.grammar_constants import *
 
 
 def get_all_constructions():
-    skeletons = [get_skeleton() for _ in range(4)]
+    skeletons = [get_skeleton() for _ in range(100)]
     unique_skeletons = []
     for skeleton in skeletons:
         if skeleton not in unique_skeletons:
@@ -15,7 +15,7 @@ def get_all_constructions():
 
 
 def get_skeleton():
-    skeleton = []
+    skeleton = {}
     skeleton_name = random.choice(list(CONSTRUCTIONS.keys()))
 
     for bone, bone_info in CONSTRUCTIONS[skeleton_name].items():
@@ -25,8 +25,6 @@ def get_skeleton():
 
         if is_processed:
             option = random.choice(bone_options)
-            skeleton.append(option)
-        else:
-            skeleton.append("X")
+            skeleton[bone] = option
 
     return skeleton

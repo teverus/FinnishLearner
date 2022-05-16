@@ -2,6 +2,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from Code.constants import *
+from Code.grammar_constants import *
 
 
 def get_all_words(target_file: str = ALL_WORDS, sort_by=SCORE) -> DataFrame:
@@ -23,3 +24,18 @@ def update_word_score(main, change: int):
     df.sort_values(by=SCORE, kind="mergesort", inplace=True, ignore_index=True)
 
     df.to_excel(ALL_WORDS, index=False)
+
+
+def export_constructions(constructions):
+    df = DataFrame([], columns=PARTS_OF_SENTENCE)
+
+    for index, construction in enumerate(constructions):
+        entry = []
+        for part_of_sentence in PARTS_OF_SENTENCE:
+            if part_of_sentence in construction.keys():
+                entry.append(construction[part_of_sentence])
+            else:
+                entry.append("X")
+        df.loc[index] = entry
+
+    df.to_excel(ALL_CONSTRUCTIONS, index=False)

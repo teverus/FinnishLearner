@@ -10,6 +10,8 @@ LINK_VERB = "Link verb"
 PREDICATE = "Predicate"
 DETACHED_WORD = "Detached word"
 
+PARTS_OF_SENTENCE = [DETACHED_WORD, SUBJECT, LINK_VERB, PREDICATE]
+
 # === Parts of speech ==================================================================
 ADJECTIVE = "Adjective"
 BE_FORM = "Be form"
@@ -27,7 +29,4 @@ class Status:
 
 
 # === Be forms =========================================================================
-BE_FORMS = {
-    "minä": "olen",
-    "sinä": "olet"
-}
+BE_FORMS = {"minä": "olen", "sinä": "olet"}
