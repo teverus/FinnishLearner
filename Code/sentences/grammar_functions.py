@@ -1,7 +1,7 @@
 import random
 
-from Code.Constructions import CONSTRUCTIONS
-from Code.grammar_constants import *
+from Code.sentences.Constructions import CONSTRUCTIONS
+from Code.sentences.grammar_constants import *
 
 
 def get_all_constructions():
@@ -25,6 +25,6 @@ def get_skeleton():
 
         if is_processed:
             option = random.choice(bone_options)
-            skeleton[bone] = option
+            skeleton[bone] = {PART_OF_SPEECH: option}
 
     return skeleton

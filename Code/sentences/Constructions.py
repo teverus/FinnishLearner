@@ -1,4 +1,4 @@
-from Code.grammar_constants import *
+from Code.sentences.grammar_constants import *
 
 """
 CONSTRUCTION_NAME: {

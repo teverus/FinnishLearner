@@ -2,7 +2,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from Code.constants import *
-from Code.grammar_constants import *
+from Code.sentences.grammar_constants import *
 
 
 def get_all_words(target_file: str = ALL_WORDS, sort_by=SCORE) -> DataFrame:

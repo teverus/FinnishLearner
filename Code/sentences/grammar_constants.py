@@ -18,6 +18,8 @@ BE_FORM = "Be form"
 INTERJECTION = "Interjection"
 PRONOUN_PERSONAL = "Pronoun personal"
 
+PART_OF_SPEECH = "Part of speech"
+
 # === Construction characteristics =====================================================
 STATUS = "Status"
 OPTIONS = "Options"

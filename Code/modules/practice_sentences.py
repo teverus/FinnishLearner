@@ -2,7 +2,7 @@ import random
 
 from Code.constants import Statistics, Settings, ALL_WORDS_SENTENCES, PART_OF_SPEECH
 from Code.db_functions import get_all_words, export_constructions
-from Code.grammar_functions import get_all_constructions
+from Code.sentences.grammar_functions import get_all_constructions
 from Code.ui_functions import show_title_head, show_run_statistics
 
 
@@ -18,8 +18,8 @@ class PracticeSentences:
     def run(self):
         for index in range(1, self.sentences_per_run + 1):
             self.show_statistics(index)
-            sentence = self.choose_a_sentence()
-            self.display_the_sentence(sentence)
+            specific_construction = self.choose_a_construction()
+            self.display_the_sentence(specific_construction)
             self.get_user_answer()
             self.evaluate_the_answer()
 
@@ -27,7 +27,8 @@ class PracticeSentences:
         show_title_head(index, self.sentences_per_run, "SENTENCE", user_tips=False)
         show_run_statistics(self.stats, Settings.SENTENCES_PER_RUN)
 
-    def choose_a_sentence(self):
+    def choose_a_construction(self):
+        # TODO надо убирать уже выбранные
         return random.choice(self.constructions)
 
     def display_the_sentence(self, sentence):
