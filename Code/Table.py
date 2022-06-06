@@ -1,3 +1,6 @@
+from typing import Union
+
+
 class Table:
     def __init__(
         self,
@@ -6,7 +9,7 @@ class Table:
         headers: list = (),
         headers_centered: bool = False,
         headers_upper: bool = False,
-        border_headers_top: str = "-",
+        border_headers_top: Union[str, bool] = "-",
         border_rows_top: str = "-",
         border_rows_bottom: str = "-",
         table_width: int = 0,
@@ -16,7 +19,7 @@ class Table:
         show_index: bool = True,
         column_border: str = "|",
         custom_index: dict = None,
-        index_column_width: dict = None
+        index_column_width: Union[dict, int] = None
     ):
         # === Given values
         # Rows

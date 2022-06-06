@@ -1,25 +1,27 @@
+from Code.Table import Table
 from Code.constants import CONFIG, Settings, WELCOME_MESSAGE, SCREEN_WIDTH
 from Code.modules.change_settings import ChangeSettings
 from Code.modules.practice_sentences import PracticeSentences
+from Code.modules.practice_verbs import PracticeVerbs
 from Code.modules.practice_words import PracticeWords
-from Code.Table import Table
 from Code.ui_functions import (
     get_user_choice,
     clear_console,
 )
 
 
+# noinspection PyAttributeOutsideInit
 class FinnishWordsLearner:
     def __init__(self):
         super(FinnishWordsLearner, self).__init__()
 
-        self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
-        self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
+        self.get_values_per_run()
 
         self.options = {
             "1": PracticeWords,
             "2": PracticeSentences,
-            "3": ChangeSettings,
+            "3": PracticeVerbs,
+            "4": ChangeSettings,
             "0": exit,
             "00": self.show_welcome_screen,
         }
@@ -27,19 +29,24 @@ class FinnishWordsLearner:
         self.stats = {
             "1": self.words_per_run,
             "2": self.sentences_per_run,
-            "3": None
+            "3": self.verbs_per_run,
+            "4": None,
         }
 
         choice = self.show_welcome_screen()
 
         while True:
-            self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
-            self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
+            self.get_values_per_run()
 
             choice = self.options[choice]() if choice in ["0", "00"] else choice
 
             module = self.options[choice](self.stats[choice])
             choice = module.result
+
+    def get_values_per_run(self):
+        self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
+        self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
+        self.verbs_per_run = int(CONFIG[Settings.VERBS_PER_RUN])
 
     def show_welcome_screen(self):
         clear_console()
@@ -50,6 +57,7 @@ class FinnishWordsLearner:
             rows=[
                 ["Practice words", self.words_per_run],
                 ["Practice sentences", self.sentences_per_run],
+                ["Practice verbs", self.verbs_per_run],
                 ["Settings"],
                 ["Exit"],
             ],

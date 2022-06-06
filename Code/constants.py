@@ -14,7 +14,7 @@ TITLE = "[ Word {} of {} ]"
 USER_TIPS = """If you can't remember a specific word, just press "Enter" key"""
 TRANSFORMATION = """a: -> ä | o: -> ö | q -> end run | r -> start a new run"""
 
-ALL_WORDS = "all_words_pos.xlsx"
+ALL_WORDS = "all_words.xlsx"
 ALL_WORDS_SENTENCES = "all_words_sentences.xlsx"
 ALL_CONSTRUCTIONS = "all_constructions.xlsx"
 
@@ -26,6 +26,7 @@ PART_OF_SPEECH = "PartOfSpeech"
 class Settings:
     WORDS_PER_RUN = "words per run"
     SENTENCES_PER_RUN = "sentences per run"
+    VERBS_PER_RUN = "verbs per run"
 
 
 class Statistics:
@@ -56,7 +57,7 @@ class Tier:
 class ExitCodes:
     SHOW_WELCOME_SCREEN = "00"
     START_THE_APPLICATION = "1"
-    GO_TO_SETTINGS = "2"
+    GO_TO_SETTINGS = "4"
 
 
 class Word:
