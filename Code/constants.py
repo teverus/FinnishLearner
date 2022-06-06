@@ -14,7 +14,7 @@ TITLE = "[ Word {} of {} ]"
 USER_TIPS = """If you can't remember a specific word, just press "Enter" key"""
 TRANSFORMATION = """a: -> ä | o: -> ö | q -> end run | r -> start a new run"""
 
-ALL_WORDS = "all_words.xlsx"
+ALL_WORDS = "all_words_pos.xlsx"
 ALL_WORDS_SENTENCES = "all_words_sentences.xlsx"
 ALL_CONSTRUCTIONS = "all_constructions.xlsx"
 
