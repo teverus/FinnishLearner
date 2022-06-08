@@ -79,7 +79,7 @@ def get_user_choice(available_options: List[str]) -> str:
     return user_choice
 
 
-def show_run_statistics(stats: dict, max_elements: str):
+def show_run_statistics(stats: dict, max_elements: Settings):
     correct = stats[Statistics.CORRECT]
     incorrect = stats[Statistics.INCORRECT]
     total = correct + incorrect

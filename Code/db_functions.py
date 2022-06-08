@@ -39,3 +39,12 @@ def export_constructions(constructions):
         df.loc[index] = entry
 
     df.to_excel(ALL_CONSTRUCTIONS, index=False)
+
+
+def save_verb_forms(verb_forms: dict, infinitive: str):
+    df = DataFrame([], columns=VERB_FORMS)
+
+    for index, (finnish, english) in enumerate(verb_forms.items()):
+        df.loc[index] = [finnish, english, 0, infinitive]
+
+    a = 1
