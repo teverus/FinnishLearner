@@ -27,6 +27,7 @@ class PracticeVerbs:
         verbs = words.loc[words.PartOfSpeech == "verb"]
         verb_list = list(verbs.Finnish.values)
 
+        skipped_verbs = []
         for verb in verb_list:
             is_in_db = len(self.verb_forms.loc[self.verb_forms.Infinitive == verb])
 
@@ -39,44 +40,41 @@ class PracticeVerbs:
 
                 soup = BeautifulSoup(response, "html.parser")
 
-                present_forms = {}
-                present_negative_forms = {}
-                conditional_forms = {}
-                conditional_negative_forms = {}
-
                 forms = {
-                    "present{}": present_forms,
-                    "present{}_neg": present_negative_forms,
-                    "conditional{}": conditional_forms,
-                    "conditional{}_neg": conditional_negative_forms,
+                    "present{}": [],
+                    "present{}_neg": [],
+                    "conditional{}": [],
+                    "conditional{}_neg": [],
                 }
 
+                shit_happened = False
                 for form in forms.keys():
-                    for index in range(1, 7):
-                        proper_id = form.format(index)
+                    if not shit_happened:
+                        for index in range(1, 7):
+                            proper_id = form.format(index)
 
-                        search_results = soup.find_all(attrs={"id": proper_id})
-                        assert len(search_results) == 1
+                            search_results = soup.find_all(attrs={"id": proper_id})
+                            if len(search_results) != 1:
+                                shit_happened = True
+                                break
+                            else:
+                                actual_verb = search_results[0].attrs
 
-                        verb = search_results[0].attrs
+                                finnish = actual_verb["data-default"]
+                                assert finnish != ""
 
-                        finnish = verb["data-default"]
-                        assert finnish != ""
+                                forms[form].append(finnish)
 
-                        english = verb["data-tooltip"]
-                        assert english != ""
+                        if not shit_happened:
+                            assert len(forms[form]) == 6
 
-                        if index == 2:
-                            english = english.replace("you", "you (singular)")
-                        elif index == 3:
-                            english = english.replace("he/she", "s/he/it")
-                            english = english.replace("do not", "does not")
-                        elif index == 5:
-                            english = english.replace("you all", "you (plural)")
+                if not shit_happened:
+                    for tense, verb_forms in forms.items():
+                        save_verb_forms(verb_forms, tense, verb)
+                else:
+                    skipped_verbs.append(verb)
 
-                        forms[form][finnish] = english
-
-                [save_verb_forms(verb_forms, verb) for verb_forms in forms.values()]
+        # print(f"These verbs were skipped:\n{skipped_verbs}")
 
 
 if __name__ == "__main__":

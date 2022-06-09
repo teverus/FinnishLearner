@@ -23,7 +23,15 @@ SCORE = "Score"
 COUNT = "Count"
 PART_OF_SPEECH = "PartOfSpeech"
 
-VERB_FORMS = ["Finnish", "English", "Score", "Infinitive"]
+VERB_FORMS = [
+    "Verb form",
+    "Tense",
+    "Negative",
+    "Person",
+    "Plural",
+    "Score",
+    "Infinitive",
+]
 
 
 class Settings:

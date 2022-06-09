@@ -1,6 +1,12 @@
+import logging
+import os
 import random
 
 from pandas import DataFrame
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 from Code.constants import *
 from Code.ui_functions import print_a_message
@@ -173,3 +179,39 @@ def remove_current_word_from_snapshot(main):
     index = df.loc[(df.Finnish == finnish) & (df.English == english)].index.item()
 
     df.drop(index, inplace=True)
+
+
+def driver():
+    """Creates an instance of a driver that will be used in the tests"""
+
+    # Make WebDriver save a driver executable in the root directory of the project
+    os.environ["WDM_LOCAL"] = "1"
+
+    # Turn on logging in the console
+    logging.getLogger('WDM').setLevel(logging.NOTSET)
+    os.environ['WDM_LOG'] = "false"
+
+    # Start a driver with the desired options
+    options = Options()
+    options.headless = False
+    options.add_argument("--window-size=1920,1080")  # Must match virtual display size
+    options.add_argument("--lang=en")  # Controls browser's UI language
+    options.add_argument("--disable-gpu")  # Best for console chrome
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--ignore-ssl-errors")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-browser-side-navigation")
+    options.add_argument("--disable-features=VizDisplayCompositor")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--dns-prefetch-disable")
+
+    # Remove Chrome browser debugging info from the console (cosmetics only)
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options,
+    )
+
+    return driver
