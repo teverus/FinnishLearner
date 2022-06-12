@@ -1,19 +1,21 @@
 import requests
 from bs4 import BeautifulSoup
 
-from Code.constants import Statistics, Settings, ALL_VERBS, Mood, Tense, POSITIVE, \
-    NEGATIVE
+from Code.constants import *
 from Code.db_functions import get_all_words, save_verb_forms
+from Code.functions import get_stats
 from Code.ui_functions import show_title_head, show_run_statistics
 
 
 class PracticeVerbs:
     def __init__(self, verbs_per_run):
         self.verbs_per_run = verbs_per_run
-        self.stats = {Statistics.CORRECT: 0, Statistics.INCORRECT: 0}
+        # TODO засунуть verb_forms в get_stats
         self.verb_forms = get_all_words(ALL_VERBS)
+        self.stats = get_stats(self.verb_forms)
 
-        self.check_if_new_verbs_were_added()
+        self.check_if_new_verbs_should_be_added()
+        self.remove_duplicates_from_db()
 
         for index in range(1, self.verbs_per_run + 1):
             self.show_statistics(index)
@@ -23,7 +25,7 @@ class PracticeVerbs:
         show_title_head(index, self.verbs_per_run, "VERB", user_tips=False)
         show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
 
-    def check_if_new_verbs_were_added(self):
+    def check_if_new_verbs_should_be_added(self):
         words = get_all_words()
         verbs = words.loc[words.PartOfSpeech == "verb"]
         verb_list = list(verbs.Finnish.values)
@@ -76,6 +78,11 @@ class PracticeVerbs:
 
         # if skipped_verbs:
         #     print(f"These verbs were skipped:\n{skipped_verbs}")
+
+    @staticmethod
+    def remove_duplicates_from_db():
+        df = get_all_words(ALL_VERBS)
+        df.to_excel(ALL_VERBS, index=False)
 
 
 if __name__ == "__main__":
