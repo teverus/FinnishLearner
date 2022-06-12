@@ -41,16 +41,15 @@ def export_constructions(constructions):
     df.to_excel(ALL_CONSTRUCTIONS, index=False)
 
 
-def save_verb_forms(verb_forms: list, tense: str, infinitive: str):
+def save_verb_forms(verb_forms: list, tense: str, infinitive: str, negativity: str):
     df_orig = pd.read_excel(ALL_VERBS, converters={"Negative": str, "Plural": str})
     df = DataFrame([], columns=VERB_FORMS)
 
     for index, verb_form in enumerate(verb_forms, 1):
-        tense_name = tense.split("{}")[0].capitalize()
-        negative = "True" if "neg" in tense else "False"
+        tense = tense.split("{}")[0].capitalize()
         person = index if index < 4 else index - 3
-        plural = "True" if index > 3 else "False"
-        df.loc[index] = [verb_form, tense_name, negative, person, plural, 0, infinitive]
+        plural = "plural" if index > 3 else "singular"
+        df.loc[index] = [verb_form, tense, negativity, person, plural, 0, infinitive]
 
     df_final = pd.concat([df_orig, df], ignore_index=True)
     df_final.to_excel(ALL_VERBS, index=False)

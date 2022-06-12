@@ -91,3 +91,19 @@ config.read(SETTINGS_FILE)
 
 CONFIG_PARSER = config
 CONFIG = config[SETTINGS]
+
+POSITIVE = "positive"
+NEGATIVE = "negative"
+
+
+class Mood:
+    INDICATIVE = "indicative mood"
+    CONDITIONAL = "conditional mood"
+
+
+class Tense:
+    PRESENT_TENSE = "present tense"
+    PRESENT = "present"
+    PAST = "past"
+    PERFECT = "perfect"
+    PLUSPERFECT = "plusperfect"
