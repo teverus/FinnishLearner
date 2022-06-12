@@ -17,7 +17,7 @@ def get_all_words(target_file: str = ALL_WORDS, sort_by=SCORE) -> DataFrame:
 
 def update_word_score(main, change: int):
     df = get_all_words()
-    word = main.word
+    word = main.item
 
     df.loc[(df.Finnish == word.finnish) & (df.English == word.english), SCORE] += change
 

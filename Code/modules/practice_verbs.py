@@ -1,24 +1,24 @@
 import requests
 from bs4 import BeautifulSoup
 
-from Code.Word import VerbForm
+from Code.DataClasses import VerbForm
 from Code.constants import *
 from Code.db_functions import get_all_words, save_verb_forms
-from Code.functions import get_stats, get_random_verb
+from Code.functions import get_stats, get_random_item
 from Code.ui_functions import show_title_head, show_run_statistics, show_word_tiers, \
     get_answer, create_a_border
 
 
 class PracticeVerbs:
     def __init__(self, verbs_per_run):
-        self.verbs_per_run = verbs_per_run
+        self.items_per_run = verbs_per_run
         self.snapshot = get_all_words(ALL_VERBS)
         self.stats = get_stats(self.snapshot)
         self.answer = None
         self.incorrect_answers = {}
         self.result = None
         self.index = None
-        self.verb_form = VerbForm()
+        self.item = VerbForm()
 
         self.prepare()
         self.run()
@@ -27,11 +27,11 @@ class PracticeVerbs:
         self.check_if_new_verbs_should_be_added()
 
     def run(self):
-        for index in range(1, self.verbs_per_run + 1):
+        for index in range(1, self.items_per_run + 1):
             self.index = index
-            get_random_verb(self)
+            get_random_item(self)
 
-            show_title_head(index, self.verbs_per_run, "VERB")
+            show_title_head(index, self.items_per_run, "VERB")
             show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
             show_word_tiers(self.stats)
 

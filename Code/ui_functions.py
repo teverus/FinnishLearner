@@ -184,12 +184,12 @@ def show_translate_prompt(word: str):
 def get_answer(main, word=True, verb=False):
     max_width = 31
     if word:
-        if len(main.word.english) > max_width:
-            tail = main.word.english[-3:]
-            head = main.word.english[: (max_width - len(tail) - 1)]
+        if len(main.item.english) > max_width:
+            tail = main.item.english[-3:]
+            head = main.item.english[: (max_width - len(tail) - 1)]
             target_word = f"{head}~{tail}"
         else:
-            target_word = f"{main.word.english.center(31)}"
+            target_word = f"{main.item.english.center(31)}"
 
     if verb:
         target_word = "12"

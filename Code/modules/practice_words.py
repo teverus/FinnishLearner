@@ -1,7 +1,7 @@
-from Code.Word import Word
+from Code.DataClasses import Word
 from Code.constants import *
 from Code.db_functions import get_all_words, update_word_score
-from Code.functions import get_stats, get_random_word, check_answer
+from Code.functions import get_stats, get_random_item, check_answer
 from Code.Table import Table
 from Code.ui_functions import (
     create_a_title,
@@ -16,14 +16,14 @@ from Code.ui_functions import (
 
 class PracticeWords:
     def __init__(self, words_per_run):
-        self.words_per_run = words_per_run
+        self.items_per_run = words_per_run
         self.snapshot = get_all_words()
         self.stats = get_stats(self.snapshot)
         self.answer = None
         self.incorrect_answers = {}
         self.result = None
         self.index = None
-        self.word = Word()
+        self.item = Word()
 
         self.prepare()
         self.run()
@@ -32,11 +32,11 @@ class PracticeWords:
         pass
 
     def run(self):
-        for index in range(1, self.words_per_run + 1):
+        for index in range(1, self.items_per_run + 1):
             self.index = index
-            get_random_word(self)
+            get_random_item(self)
 
-            show_title_head(index, self.words_per_run, "WORD")
+            show_title_head(index, self.items_per_run, "WORD")
             show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
             show_word_tiers(self.stats)
 

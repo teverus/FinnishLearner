@@ -65,19 +65,15 @@ def get_stats_dict() -> dict:
     }
 
 
-def get_random_word(main):
-    word = choose_a_word(main)
+def get_random_item(main):
+    word = choose_an_item(main)
 
     while word is False:
         advance_current_tier(main)
-        word = choose_a_word(main)
+        word = choose_an_item(main)
 
 
-def get_random_verb(main):
-    a = 1
-
-
-def choose_a_word(main):
+def choose_an_item(main):
     df = main.snapshot
 
     current_tier = main.stats[Statistics.CURRENT_TIER]
@@ -102,8 +98,9 @@ def choose_a_word(main):
     random_number = random.randint(0, len(words_on_this_tier) - 1)
     random_word = words_on_this_tier.iloc[random_number]
 
-    main.word.finnish = random_word.Finnish
-    main.word.english = random_word.English
+    # TODO разное поведение для word и verb
+    main.item.finnish = random_word.Finnish
+    main.item.english = random_word.English
 
 
 def advance_current_tier(main):
@@ -114,7 +111,7 @@ def advance_current_tier(main):
 
 def check_answer(main) -> int:
     answer = main.answer
-    expected_answer = main.word.finnish
+    expected_answer = main.item.finnish
 
     if answer == expected_answer:
         target_stats = Statistics.CORRECT
@@ -127,7 +124,7 @@ def check_answer(main) -> int:
         )
 
     else:
-        main.incorrect_answers[main.index] = {Word.ENGLISH: main.word.english}
+        main.incorrect_answers[main.index] = {Word.ENGLISH: main.item.english}
         main.incorrect_answers[main.index][Word.FINNISH] = expected_answer
         main.incorrect_answers[main.index][Word.INCORRECT] = answer
         target_stats = Statistics.INCORRECT
@@ -158,25 +155,25 @@ def update_current_tier(main):
 
 
 def make_user_write_type_three_times(main):
-    print(f' Please type "{main.word.finnish}" and hit "Enter" three times.')
+    print(f' Please type "{main.item.finnish}" and hit "Enter" three times.')
 
     correct_times = 0
     max_times = 3
     while correct_times != max_times:
         user_input = input(" >>> ").replace("a:", "ä").replace("o:", "ö")
-        if user_input == main.word.finnish:
+        if user_input == main.item.finnish:
             correct_times += 1
             if correct_times == max_times:
                 print(f" [SUCCESS] That's it :) Keep on learning :)")
             else:
                 print(f" [SUCCESS] Yes! {max_times - correct_times} to go!")
         else:
-            print(f' [FAILURE] Nope, you need to type "{main.word.finnish}".')
+            print(f' [FAILURE] Nope, you need to type "{main.item.finnish}".')
 
 
 def remove_current_word_from_snapshot(main):
     df = main.snapshot
-    word = main.word
+    word = main.item
     finnish = word.finnish
     english = word.english
 
