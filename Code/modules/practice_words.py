@@ -19,13 +19,17 @@ class PracticeWords:
         self.words_per_run = words_per_run
         self.snapshot = get_all_words()
         self.stats = get_stats(self.snapshot)
-        self.word = Word()
         self.answer = None
         self.incorrect_answers = {}
-
         self.result = None
         self.index = None
+        self.word = Word()
+
+        self.prepare()
         self.run()
+
+    def prepare(self):
+        pass
 
     def run(self):
         for index in range(1, self.words_per_run + 1):

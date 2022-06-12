@@ -1,39 +1,58 @@
 import requests
 from bs4 import BeautifulSoup
 
+from Code.Word import VerbForm
 from Code.constants import *
 from Code.db_functions import get_all_words, save_verb_forms
-from Code.functions import get_stats
-from Code.ui_functions import show_title_head, show_run_statistics
+from Code.functions import get_stats, get_random_verb
+from Code.ui_functions import show_title_head, show_run_statistics, show_word_tiers, \
+    get_answer, create_a_border
 
 
 class PracticeVerbs:
     def __init__(self, verbs_per_run):
         self.verbs_per_run = verbs_per_run
-        # TODO засунуть verb_forms в get_stats
-        self.verb_forms = get_all_words(ALL_VERBS)
-        self.stats = get_stats(self.verb_forms)
+        self.snapshot = get_all_words(ALL_VERBS)
+        self.stats = get_stats(self.snapshot)
+        self.answer = None
+        self.incorrect_answers = {}
+        self.result = None
+        self.index = None
+        self.verb_form = VerbForm()
 
+        self.prepare()
+        self.run()
+
+    def prepare(self):
         self.check_if_new_verbs_should_be_added()
-        self.remove_duplicates_from_db()
 
+    def run(self):
         for index in range(1, self.verbs_per_run + 1):
-            self.show_statistics(index)
-            a = 1
+            self.index = index
+            get_random_verb(self)
 
-    def show_statistics(self, index):
-        show_title_head(index, self.verbs_per_run, "VERB", user_tips=False)
-        show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
+            show_title_head(index, self.verbs_per_run, "VERB")
+            show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
+            show_word_tiers(self.stats)
+
+            print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
+            print(f"{'-' * 33}+{'-' * 35}")
+
+            answer = get_answer(self, word=False, verb=True)
+            create_a_border("=")
+
+            a = 1
 
     def check_if_new_verbs_should_be_added(self):
         words = get_all_words()
         verbs = words.loc[words.PartOfSpeech == "verb"]
         verb_list = list(verbs.Finnish.values)
 
+        added_verbs = []
         skipped_verbs = []
         for verb_index, verb in enumerate(verb_list):
 
-            is_in_db = len(self.verb_forms.loc[self.verb_forms.Infinitive == verb])
+            is_in_db = len(self.snapshot.loc[self.snapshot.Infinitive == verb])
             if is_in_db:
                 continue
 
@@ -75,14 +94,11 @@ class PracticeVerbs:
                         ]
 
                         save_verb_forms(verb_forms, tense, verb, negativity)
+                        added_verbs.append(verb)
 
-        # if skipped_verbs:
-        #     print(f"These verbs were skipped:\n{skipped_verbs}")
-
-    @staticmethod
-    def remove_duplicates_from_db():
-        df = get_all_words(ALL_VERBS)
-        df.to_excel(ALL_VERBS, index=False)
+        if added_verbs:
+            df = get_all_words(ALL_VERBS)
+            df.to_excel(ALL_VERBS, index=False)
 
 
 if __name__ == "__main__":

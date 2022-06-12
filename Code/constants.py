@@ -11,7 +11,7 @@ LIGHT_SHADOW = "\u2591"
 DOT = "\u00b7"
 
 TITLE = "[ Word {} of {} ]"
-USER_TIPS = """If you can't remember a specific word, just press "Enter" key"""
+USER_TIPS = """If you can't remember the correct answer, press the "Enter" key"""
 TRANSFORMATION = """a: -> ä | o: -> ö | q -> end run | r -> start a new run"""
 
 ALL_WORDS = "all_words.xlsx"

@@ -65,12 +65,16 @@ def get_stats_dict() -> dict:
     }
 
 
-def get_random_word(main) -> None:
+def get_random_word(main):
     word = choose_a_word(main)
 
     while word is False:
         advance_current_tier(main)
         word = choose_a_word(main)
+
+
+def get_random_verb(main):
+    a = 1
 
 
 def choose_a_word(main):
@@ -188,8 +192,8 @@ def driver():
     os.environ["WDM_LOCAL"] = "1"
 
     # Turn on logging in the console
-    logging.getLogger('WDM').setLevel(logging.NOTSET)
-    os.environ['WDM_LOG'] = "false"
+    logging.getLogger("WDM").setLevel(logging.NOTSET)
+    os.environ["WDM_LOG"] = "false"
 
     # Start a driver with the desired options
     options = Options()

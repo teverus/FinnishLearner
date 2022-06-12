@@ -181,16 +181,20 @@ def show_translate_prompt(word: str):
     print(f"\n English: {word}")
 
 
-def get_answer(main):
+def get_answer(main, word=True, verb=False):
     max_width = 31
-    if len(main.word.english) > max_width:
-        tail = main.word.english[-3:]
-        head = main.word.english[: (max_width - len(tail) - 1)]
-        word = f"{head}~{tail}"
-    else:
-        word = f"{main.word.english.center(31)}"
+    if word:
+        if len(main.word.english) > max_width:
+            tail = main.word.english[-3:]
+            head = main.word.english[: (max_width - len(tail) - 1)]
+            target_word = f"{head}~{tail}"
+        else:
+            target_word = f"{main.word.english.center(31)}"
 
-    answer = input(f" {word} | >>> ").strip()
+    if verb:
+        target_word = "12"
+
+    answer = input(f" {target_word} | >>> ").strip()
 
     if answer in ["q", "r"]:
         return False
