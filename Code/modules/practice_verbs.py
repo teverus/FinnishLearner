@@ -35,6 +35,7 @@ class PracticeVerbs:
             show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
             show_word_tiers(self.stats)
 
+            # TODO засунуть в get_answer. Переименовать метод
             print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
             print(f"{'-' * 33}+{'-' * 35}")
 

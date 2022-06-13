@@ -183,6 +183,7 @@ def show_translate_prompt(word: str):
 
 def get_answer(main, word=True, verb=False):
     max_width = 31
+
     if word:
         if len(main.item.english) > max_width:
             tail = main.item.english[-3:]
@@ -191,10 +192,13 @@ def get_answer(main, word=True, verb=False):
         else:
             target_word = f"{main.item.english.center(31)}"
 
-    if verb:
-        target_word = "12"
+        answer = input(f" {target_word} | >>> ").strip()
 
-    answer = input(f" {target_word} | >>> ").strip()
+    if verb:
+        characteristics = main.item.english.split("(")[1].split(")")[0].center(31)
+        pronoun_infinitive = main.item.english.split(")")[-1].strip()
+
+        answer = input(f" {characteristics} | {pronoun_infinitive} ").strip()
 
     if answer in ["q", "r"]:
         return False
