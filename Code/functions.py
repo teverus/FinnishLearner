@@ -65,42 +65,49 @@ def get_stats_dict() -> dict:
     }
 
 
-def get_random_item(main):
-    word = choose_an_item(main)
+def get_random_item(main, item_type: ItemType):
+    word = choose_an_item(main, item_type)
 
     while word is False:
         advance_current_tier(main)
-        word = choose_an_item(main)
+        word = choose_an_item(main, item_type)
 
 
-def choose_an_item(main):
+def choose_an_item(main, item_type: ItemType):
     df = main.snapshot
 
     current_tier = main.stats[Statistics.CURRENT_TIER]
     max_score = [_ for _, value in SCORE_TO_TIER.items() if value == current_tier][0]
 
     if max_score == 0:
-        words_on_this_tier = df.loc[df.Score <= max_score]
+        items_on_this_tier = df.loc[df.Score <= max_score]
     elif max_score == 15:
-        words_on_this_tier = df.loc[df.Score >= max_score]
+        items_on_this_tier = df.loc[df.Score >= max_score]
     else:
-        words_on_this_tier = df.loc[df.Score == max_score]
+        items_on_this_tier = df.loc[df.Score == max_score]
 
-    if len(words_on_this_tier) == 0:
+    if len(items_on_this_tier) == 0:
         return False
 
-    elif len(words_on_this_tier.groupby(SCORE)) != 1:
-        available_groups = list(words_on_this_tier.groupby(SCORE).groups.keys())
+    elif len(items_on_this_tier.groupby(SCORE)) != 1:
+        available_groups = list(items_on_this_tier.groupby(SCORE).groups.keys())
         for group in available_groups:
-            words_on_this_tier = df.loc[df.Score == group]
+            items_on_this_tier = df.loc[df.Score == group]
             break
 
-    random_number = random.randint(0, len(words_on_this_tier) - 1)
-    random_word = words_on_this_tier.iloc[random_number]
+    random_number = random.randint(0, len(items_on_this_tier) - 1)
+    random_item = items_on_this_tier.iloc[random_number]
 
-    # TODO разное поведение для word и verb
-    main.item.finnish = random_word.Finnish
-    main.item.english = random_word.English
+    if item_type == ItemType.WORD:
+        main.item.finnish = random_item.Finnish
+        main.item.english = random_item.English
+
+    elif item_type == ItemType.VERB:
+        main.item.finnish = random_item["Verb form"]
+        ri = random_item
+        pronoun = f"{ri.Person} {ri.Plural}"
+        pronoun = PERSONAL_PRONOUNS[pronoun]
+        main.item.english = f"({ri.Mood}|{ri.Tense}|{ri.Negative}) {pronoun} [{ri.Infinitive}]"
 
 
 def advance_current_tier(main):

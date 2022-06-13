@@ -34,9 +34,9 @@ class PracticeWords:
     def run(self):
         for index in range(1, self.items_per_run + 1):
             self.index = index
-            get_random_item(self)
+            get_random_item(self, ItemType.WORD)
 
-            show_title_head(index, self.items_per_run, "WORD")
+            show_title_head(index, self.items_per_run, ItemType.WORD)
             show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
             show_word_tiers(self.stats)
 

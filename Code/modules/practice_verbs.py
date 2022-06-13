@@ -29,9 +29,9 @@ class PracticeVerbs:
     def run(self):
         for index in range(1, self.items_per_run + 1):
             self.index = index
-            get_random_item(self)
+            get_random_item(self, ItemType.VERB)
 
-            show_title_head(index, self.items_per_run, "VERB")
+            show_title_head(index, self.items_per_run, ItemType.VERB)
             show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
             show_word_tiers(self.stats)
 
@@ -51,6 +51,7 @@ class PracticeVerbs:
         added_verbs = []
         skipped_verbs = []
         for verb_index, verb in enumerate(verb_list):
+            # print(f" Checking verbs [{verb_index+1}/{len(verb_list)}]")
 
             is_in_db = len(self.snapshot.loc[self.snapshot.Infinitive == verb])
             if is_in_db:
@@ -93,7 +94,7 @@ class PracticeVerbs:
                             if verb_form.attrs["data-accel-col"] == index
                         ]
 
-                        save_verb_forms(verb_forms, tense, verb, negativity)
+                        save_verb_forms(verb_forms, tense, verb, negativity, mood)
                         added_verbs.append(verb)
 
         if added_verbs:

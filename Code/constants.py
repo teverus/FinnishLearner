@@ -25,6 +25,7 @@ PART_OF_SPEECH = "PartOfSpeech"
 
 VERB_FORMS = [
     "Verb form",
+    "Mood",
     "Tense",
     "Negative",
     "Person",
@@ -107,3 +108,18 @@ class Tense:
     PAST = "past"
     PERFECT = "perfect"
     PLUSPERFECT = "plusperfect"
+
+
+class ItemType:
+    WORD = "WORD"
+    VERB = "VERB"
+
+
+PERSONAL_PRONOUNS = {
+    "1 Singular": "minä",
+    "2 Singular": "sinä",
+    "3 Singular": "hän",
+    "1 Plural": "me",
+    "2 Plural": "te",
+    "3 Plural": "he"
+}
