@@ -65,15 +65,15 @@ def get_stats_dict() -> dict:
     }
 
 
-def get_random_item(main, item_type: ItemType):
-    word = choose_an_item(main, item_type)
+def get_random_item(main):
+    word = choose_an_item(main)
 
     while word is False:
         advance_current_tier(main)
-        word = choose_an_item(main, item_type)
+        word = choose_an_item(main)
 
 
-def choose_an_item(main, item_type: ItemType):
+def choose_an_item(main):
     df = main.snapshot
 
     current_tier = main.stats[Statistics.CURRENT_TIER]
@@ -98,11 +98,11 @@ def choose_an_item(main, item_type: ItemType):
     random_number = random.randint(0, len(items_on_this_tier) - 1)
     random_item = items_on_this_tier.iloc[random_number]
 
-    if item_type == ItemType.WORD:
+    if main.item.item_type == ItemType.WORD:
         main.item.finnish = random_item.Finnish
         main.item.english = random_item.English
 
-    elif item_type == ItemType.VERB:
+    elif main.item.item_type == ItemType.VERB:
         main.item.finnish = random_item["Verb form"]
         ri = random_item
         pronoun = f"{ri.Person} {ri.Plural}"
@@ -116,6 +116,7 @@ def advance_current_tier(main):
     main.stats[Statistics.CURRENT_TIER] = next_tier[0]
 
 
+# TODO прокидывать item_type
 def check_answer(main) -> int:
     answer = main.answer
     expected_answer = main.item.finnish

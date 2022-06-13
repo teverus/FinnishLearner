@@ -129,7 +129,11 @@ def get_longest_total_number(stats: dict) -> int:
     return len(str(max(max_number))) + 1
 
 
-def show_title_head(index, max_index, element_type, user_tips=True):
+def show_title_head(main, user_tips=True):
+    index = main.index
+    max_index = main.item.per_run
+    element_type = main.item.item_type
+
     os.system("cls")
     create_a_border("=")
     current_statistics = f"{element_type} {index:02} OF {max_index:02}".center(22)
