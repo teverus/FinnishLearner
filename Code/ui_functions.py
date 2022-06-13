@@ -184,6 +184,9 @@ def show_translate_prompt(word: str):
 def get_answer(main, word=True, verb=False):
     max_width = 31
 
+    print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
+    print(f"{'-' * 33}+{'-' * 35}")
+
     if word:
         if len(main.item.english) > max_width:
             tail = main.item.english[-3:]

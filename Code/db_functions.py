@@ -15,7 +15,7 @@ def get_all_words(target_file: str = ALL_WORDS, sort_by=SCORE) -> DataFrame:
     return df
 
 
-def update_word_score(main, change: int):
+def update_item_score(main, change: int):
     df = get_all_words()
     word = main.item
 

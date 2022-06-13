@@ -1,6 +1,6 @@
 from Code.DataClasses import Word
 from Code.constants import *
-from Code.db_functions import get_all_words, update_word_score
+from Code.db_functions import get_all_words, update_item_score
 from Code.functions import get_stats, get_random_item, check_answer
 from Code.Table import Table
 from Code.ui_functions import (
@@ -40,16 +40,13 @@ class PracticeWords:
             show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
             show_word_tiers(self.stats)
 
-            print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
-            print(f"{'-' * 33}+{'-' * 35}")
-
             answer = get_answer(self)
             create_a_border("=")
 
             if answer:
                 score_delta = check_answer(self)
 
-                update_word_score(self, score_delta)
+                update_item_score(self, score_delta)
 
                 input("""\n Press "Enter" to continue...""")
 

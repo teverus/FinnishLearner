@@ -184,6 +184,7 @@ def remove_current_word_from_snapshot(main):
     finnish = word.finnish
     english = word.english
 
+    # TODO если глагол, то ищем по форме
     index = df.loc[(df.Finnish == finnish) & (df.English == english)].index.item()
 
     df.drop(index, inplace=True)

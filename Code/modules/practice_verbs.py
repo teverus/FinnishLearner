@@ -2,11 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 
 from Code.DataClasses import VerbForm
+from Code.Table import Table
 from Code.constants import *
-from Code.db_functions import get_all_words, save_verb_forms
-from Code.functions import get_stats, get_random_item
-from Code.ui_functions import show_title_head, show_run_statistics, show_word_tiers, \
-    get_answer, create_a_border
+from Code.db_functions import get_all_words, save_verb_forms, update_item_score
+from Code.functions import get_stats, get_random_item, check_answer
+from Code.ui_functions import (
+    show_title_head,
+    show_run_statistics,
+    show_word_tiers,
+    get_answer,
+    create_a_border,
+    create_a_title,
+)
 
 
 class PracticeVerbs:
@@ -35,14 +42,43 @@ class PracticeVerbs:
             show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
             show_word_tiers(self.stats)
 
-            # TODO засунуть в get_answer. Переименовать метод
-            print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
-            print(f"{'-' * 33}+{'-' * 35}")
-
             answer = get_answer(self, word=False, verb=True)
             create_a_border("=")
 
+            if answer:
+                score_delta = check_answer(self)
+
+                update_item_score(self, score_delta)
+
+                input("""\n Press "Enter" to continue...""")
+
+            else:
+                break
+
+            self.show_results()
+
             a = 1
+
+    def show_results(self):
+        create_a_title("Your results")
+        show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
+
+        if self.incorrect_answers:
+            incorrect_answers = [
+                list(self.incorrect_answers[key].values())
+                for key, value in self.incorrect_answers.items()
+            ]
+
+            Table(
+                headers=["English", "Correct", "Incorrect"],
+                headers_upper=True,
+                headers_centered=True,
+                rows=incorrect_answers,
+                rows_centered=True,
+                table_width=SCREEN_WIDTH,
+                border_headers_top=False,
+                border_rows_bottom="=",
+            )
 
     def check_if_new_verbs_should_be_added(self):
         words = get_all_words()
