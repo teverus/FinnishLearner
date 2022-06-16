@@ -1,12 +1,6 @@
-import logging
-import os
 import random
 
 from pandas import DataFrame
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 from Code.constants import *
 from Code.ui_functions import print_a_message
@@ -107,7 +101,9 @@ def choose_an_item(main):
         ri = random_item
         pronoun = f"{ri.Person} {ri.Plural}"
         pronoun = PERSONAL_PRONOUNS[pronoun]
-        main.item.english = f"({ri.Mood}|{ri.Tense}|{ri.Negative}) {pronoun} [{ri.Infinitive}]"
+        main.item.english = (
+            f"({ri.Mood}|{ri.Tense}|{ri.Negative}) [{ri.Infinitive}] {pronoun} "
+        )
 
 
 def advance_current_tier(main):
@@ -116,7 +112,6 @@ def advance_current_tier(main):
     main.stats[Statistics.CURRENT_TIER] = next_tier[0]
 
 
-# TODO прокидывать item_type
 def check_answer(main) -> int:
     answer = main.answer
     expected_answer = main.item.finnish
@@ -181,47 +176,23 @@ def make_user_write_type_three_times(main):
 
 def remove_current_word_from_snapshot(main):
     df = main.snapshot
-    word = main.item
-    finnish = word.finnish
-    english = word.english
-
-    # TODO если глагол, то ищем по форме
-    index = df.loc[(df.Finnish == finnish) & (df.English == english)].index.item()
+    index = find_item_in_db(main, df).index.item()
 
     df.drop(index, inplace=True)
 
 
-def driver():
-    """Creates an instance of a driver that will be used in the tests"""
+def find_item_in_db(main, df: DataFrame):
+    item = None
+    word = main.item
+    finnish = word.finnish
+    english = word.english
 
-    # Make WebDriver save a driver executable in the root directory of the project
-    os.environ["WDM_LOCAL"] = "1"
+    if main.item.item_type == ItemType.WORD:
+        item = df.loc[(df.Finnish == finnish) & (df.English == english)]
+    elif main.item.item_type == ItemType.VERB:
+        item = df.loc[df["Verb form"] == main.item.finnish]
 
-    # Turn on logging in the console
-    logging.getLogger("WDM").setLevel(logging.NOTSET)
-    os.environ["WDM_LOG"] = "false"
-
-    # Start a driver with the desired options
-    options = Options()
-    options.headless = False
-    options.add_argument("--window-size=1920,1080")  # Must match virtual display size
-    options.add_argument("--lang=en")  # Controls browser's UI language
-    options.add_argument("--disable-gpu")  # Best for console chrome
-    options.add_argument("--ignore-certificate-errors")
-    options.add_argument("--ignore-ssl-errors")
-    options.add_argument("--disable-infobars")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-browser-side-navigation")
-    options.add_argument("--disable-features=VizDisplayCompositor")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--dns-prefetch-disable")
-
-    # Remove Chrome browser debugging info from the console (cosmetics only)
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
-
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=options,
-    )
-
-    return driver
+    if len(item):
+        return item
+    else:
+        raise Exception("\n[ERROR] Couldn't find an item in db")

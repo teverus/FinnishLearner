@@ -2,6 +2,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from Code.constants import *
+from Code.functions import find_item_in_db
 from Code.sentences.grammar_constants import *
 
 
@@ -16,14 +17,19 @@ def get_all_words(target_file: str = ALL_WORDS, sort_by=SCORE) -> DataFrame:
 
 
 def update_item_score(main, change: int):
-    df = get_all_words()
-    word = main.item
+    target_file = {
+        ItemType.WORD: ALL_WORDS,
+        ItemType.VERB: ALL_VERBS
+    }
+    target_file = target_file[main.item.item_type]
 
-    df.loc[(df.Finnish == word.finnish) & (df.English == word.english), SCORE] += change
+    df = get_all_words(target_file)
+
+    df.loc[find_item_in_db(main, df).index.item(), SCORE] += change
 
     df.sort_values(by=SCORE, kind="mergesort", inplace=True, ignore_index=True)
 
-    df.to_excel(ALL_WORDS, index=False)
+    df.to_excel(target_file, index=False)
 
 
 def export_constructions(constructions):
@@ -42,7 +48,7 @@ def export_constructions(constructions):
 
 
 def save_verb_forms(
-    verb_forms: list, tense: str, infinitive: str, negativity: str, mood: str
+        verb_forms: list, tense: str, infinitive: str, negativity: str, mood: str
 ):
     df_orig = pd.read_excel(ALL_VERBS, converters={"Negative": str, "Plural": str})
     df = DataFrame([], columns=VERB_FORMS)

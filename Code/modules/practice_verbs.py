@@ -12,7 +12,7 @@ from Code.ui_functions import (
     show_word_tiers,
     get_answer,
     create_a_border,
-    create_a_title,
+    create_a_title, get_user_choice,
 )
 
 
@@ -38,7 +38,7 @@ class PracticeVerbs:
             get_random_item(self)
 
             show_title_head(self)
-            show_run_statistics(self.stats, Settings.VERBS_PER_RUN)
+            show_run_statistics(self)
             show_word_tiers(self.stats)
 
             answer = get_answer(self, word=False, verb=True)
@@ -55,11 +55,37 @@ class PracticeVerbs:
                 break
 
         self.show_results()
-        a = 1
+        available_options = Table(
+            headers=["What would you like to do next?"],
+            headers_centered=True,
+            rows=[
+                "Start a new run",
+                'Go to "Settings"',
+                "Go to main menu",
+                "Exit the application",
+            ],
+            custom_index={"Exit the application": 0},
+            border_headers_top=False,
+            border_rows_bottom="=",
+            table_width=SCREEN_WIDTH,
+            index_column_width=len(str(len(self.incorrect_answers))),
+        ).available_options
+        user_choice = get_user_choice(available_options)
+
+        if user_choice == "0":
+            exit()
+        else:
+            options = {
+                "1": ExitCodes.START_THE_APPLICATION,
+                "2": ExitCodes.GO_TO_SETTINGS,
+                "3": ExitCodes.SHOW_WELCOME_SCREEN,
+            }
+            self.result = options[user_choice]
+            return
 
     def show_results(self):
         create_a_title("Your results")
-        show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
+        show_run_statistics(self)
 
         if self.incorrect_answers:
             incorrect_answers = [

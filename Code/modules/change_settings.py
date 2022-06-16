@@ -31,7 +31,8 @@ class ChangeSettings:
         options = {
             "1": self.change_setting,
             "2": self.change_setting,
-            "3": self.reset_scores,
+            "3": self.change_setting,
+            "4": self.reset_scores,
         }
 
         while True:

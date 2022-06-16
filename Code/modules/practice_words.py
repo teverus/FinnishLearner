@@ -36,7 +36,7 @@ class PracticeWords:
             get_random_item(self)
 
             show_title_head(self)
-            show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
+            show_run_statistics(self)
             show_word_tiers(self.stats)
 
             answer = get_answer(self)
@@ -84,7 +84,7 @@ class PracticeWords:
 
     def show_results(self):
         create_a_title("Your results")
-        show_run_statistics(self.stats, Settings.WORDS_PER_RUN)
+        show_run_statistics(self)
 
         if self.incorrect_answers:
             incorrect_answers = [
