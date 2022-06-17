@@ -1,12 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 
-from Code.DataClasses import VerbForm
-from Code.Table import Table
+from Code.ItemTypeClasses import VerbForm
+from Code.functions.general import get_stats, get_random_item, check_answer
+from Code.tables.Table import Table
 from Code.constants import *
-from Code.db_functions import get_all_words, save_verb_forms, update_item_score
-from Code.functions import get_stats, get_random_item, check_answer
-from Code.ui_functions import (
+from Code.functions.db import get_all_words, save_verb_forms, update_item_score
+from Code.functions.ui import (
     show_title_head,
     show_run_statistics,
     show_word_tiers,
@@ -26,10 +26,10 @@ class PracticeVerbs:
         self.index = None
         self.item = VerbForm(verbs_per_run)
 
-        self.prepare()
+        self.set_up()
         self.run()
 
-    def prepare(self):
+    def set_up(self):
         self.check_if_new_verbs_should_be_added()
 
     def run(self):
@@ -55,6 +55,7 @@ class PracticeVerbs:
                 break
 
         self.show_results()
+        # TODO Вынести таблицу в отдельный класс
         available_options = Table(
             headers=["What would you like to do next?"],
             headers_centered=True,
@@ -88,11 +89,15 @@ class PracticeVerbs:
         show_run_statistics(self)
 
         if self.incorrect_answers:
-            incorrect_answers = [
-                list(self.incorrect_answers[key].values())
-                for key, value in self.incorrect_answers.items()
-            ]
+            incorrect_answers = []
+            for key, value in self.incorrect_answers.items():
+                if self.item.item_type == ItemType.VERB:
+                    # TODO отрубать инфинитив
+                    a = 1
+                else:
+                    incorrect_answers.append(list(self.incorrect_answers[key].values()))
 
+            # TODO вынести таблицу в отдельный класс
             Table(
                 headers=["English", "Correct", "Incorrect"],
                 headers_upper=True,

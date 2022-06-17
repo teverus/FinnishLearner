@@ -1,9 +1,9 @@
-from Code.DataClasses import Word
-from Code.constants import Settings, SCREEN_WIDTH, ExitCodes
-from Code.db_functions import get_all_words, update_item_score
-from Code.functions import get_stats, get_random_item, check_answer
-from Code.Table import Table
-from Code.ui_functions import (
+from Code.ItemTypeClasses import Word
+from Code.constants import SCREEN_WIDTH, ExitCodes
+from Code.functions.db import get_all_words, update_item_score
+from Code.functions.general import check_answer, get_stats, get_random_item
+from Code.tables.Table import Table
+from Code.functions.ui import (
     create_a_title,
     show_run_statistics,
     show_word_tiers,
@@ -24,10 +24,10 @@ class PracticeWords:
         self.index = None
         self.item = Word(words_per_run)
 
-        self.prepare()
+        self.set_up()
         self.run()
 
-    def prepare(self):
+    def set_up(self):
         pass
 
     def run(self):

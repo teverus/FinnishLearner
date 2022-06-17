@@ -2,7 +2,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from Code.constants import *
-from Code.functions import find_item_in_db
+from Code.functions.general import find_item_in_db
 from Code.sentences.grammar_constants import *
 
 

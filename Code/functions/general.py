@@ -3,7 +3,7 @@ import random
 from pandas import DataFrame
 
 from Code.constants import *
-from Code.ui_functions import print_a_message
+from Code.functions.ui import print_a_message
 
 
 def get_stats(df: DataFrame) -> dict:

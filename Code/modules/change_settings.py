@@ -1,7 +1,7 @@
 from Code.constants import *
-from Code.db_functions import get_all_words
-from Code.Table import Table
-from Code.ui_functions import (
+from Code.functions.db import get_all_words
+from Code.tables.Table import Table
+from Code.functions.ui import (
     get_user_choice,
     print_a_message,
     clear_console,
