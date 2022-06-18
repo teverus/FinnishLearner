@@ -1,6 +1,7 @@
 from Code.ItemTypeClasses import Word
 from Code.constants import SCREEN_WIDTH, ExitCodes, ItemType
-from Code.functions.db import get_all_words, update_item_score
+from Code.functions.db import update_item_score
+from Code.functions.high_level import get_all_words
 from Code.functions.general import (
     check_answer,
     get_stats,

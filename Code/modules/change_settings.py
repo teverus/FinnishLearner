@@ -1,5 +1,5 @@
 from Code.constants import *
-from Code.functions.db import get_all_words
+from Code.functions.high_level import get_all_words
 from Code.tables.Table import Table
 from Code.functions.ui import (
     get_user_choice,

@@ -1,14 +1,13 @@
-import requests
-from bs4 import BeautifulSoup
-
 from Code.ItemTypeClasses import VerbForm
 from Code.constants import *
-from Code.functions.db import get_all_words, save_verb_forms, update_item_score
+from Code.functions.db import update_item_score
+from Code.functions.high_level import get_all_words
 from Code.functions.general import (
     get_stats,
     get_random_item,
     check_answer,
     get_incorrect_answers,
+    check_if_new_verbs_should_be_added,
 )
 from Code.functions.ui import (
     show_title_head,
@@ -21,7 +20,6 @@ from Code.functions.ui import (
 )
 from Code.tables.EndRunActionsTable import EndRunActionsTable
 from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
-from Code.tables.Table import Table
 
 
 class PracticeVerbs:
@@ -39,7 +37,7 @@ class PracticeVerbs:
         self.tear_down()
 
     def set_up(self):
-        self.check_if_new_verbs_should_be_added()
+        check_if_new_verbs_should_be_added(self)
 
     def run(self):
         for index in range(1, self.item.per_run + 1):
@@ -84,64 +82,6 @@ class PracticeVerbs:
             }
             self.result = options[user_choice]
             return
-
-    def check_if_new_verbs_should_be_added(self):
-        words = get_all_words()
-        verbs = words.loc[words.PartOfSpeech == "verb"]
-        verb_list = list(verbs.Finnish.values)
-
-        added_verbs = []
-        skipped_verbs = []
-        for verb_index, verb in enumerate(verb_list):
-            # print(f" Checking verbs [{verb_index+1}/{len(verb_list)}]")
-
-            is_in_db = len(self.snapshot.loc[self.snapshot.Infinitive == verb])
-            if is_in_db:
-                continue
-
-            url = f"https://en.wiktionary.org/wiki/{verb}"
-            soup = BeautifulSoup(requests.get(url).text, "html.parser")
-            if not soup.find(attrs={"class": "inflection-table"}):
-                skipped_verbs.append(verb)
-                continue
-
-            target_tenses = {
-                Mood.INDICATIVE: {Tense.PRESENT_TENSE: [POSITIVE, NEGATIVE]},
-                Mood.CONDITIONAL: {Tense.PRESENT: [POSITIVE, NEGATIVE]},
-            }
-            column_index = {
-                Tense.PRESENT: {POSITIVE: "1", NEGATIVE: "2"},
-                Tense.PAST: {POSITIVE: "1", NEGATIVE: "2"},
-                Tense.PERFECT: {POSITIVE: "3", NEGATIVE: "4"},
-                Tense.PLUSPERFECT: {POSITIVE: "3", NEGATIVE: "4"},
-            }
-
-            for mood, target_tense in target_tenses.items():
-                for tense, target_negativity in target_tense.items():
-
-                    proper_mood = soup.find(attrs={"title": mood})
-                    if mood == Mood.INDICATIVE:
-                        proper_tense = proper_mood.find_next(attrs={"title": tense})
-                    else:
-                        proper_tense = proper_mood.find_next("th", text="present\n")
-                    verb_forms_all = proper_tense.find_all_next("td")[0:24]
-
-                    for negativity in target_negativity:
-                        tense = Tense.PRESENT if tense == Tense.PRESENT_TENSE else tense
-                        index = column_index[tense][negativity]
-
-                        verb_forms = [
-                            verb_form.text.strip("\n")
-                            for verb_form in verb_forms_all
-                            if verb_form.attrs["data-accel-col"] == index
-                        ]
-
-                        save_verb_forms(verb_forms, tense, verb, negativity, mood)
-                        added_verbs.append(verb)
-
-        if added_verbs:
-            df = get_all_words(ALL_VERBS)
-            df.to_excel(ALL_VERBS, index=False)
 
 
 if __name__ == "__main__":
