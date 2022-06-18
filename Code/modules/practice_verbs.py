@@ -13,6 +13,7 @@ from Code.functions.ui import (
     create_a_border,
     create_a_title, get_user_choice,
 )
+from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 from Code.tables.Table import Table
 
 
@@ -101,17 +102,7 @@ class PracticeVerbs:
 
                 incorrect_answers.append(result)
 
-            # TODO вынести таблицу в отдельный класс
-            Table(
-                headers=["English", "Correct", "Incorrect"],
-                headers_upper=True,
-                headers_centered=True,
-                rows=incorrect_answers,
-                rows_centered=True,
-                table_width=SCREEN_WIDTH,
-                border_headers_top=False,
-                border_rows_bottom="=",
-            )
+            IncorrectAnswersTable(incorrect_answers)
 
     def check_if_new_verbs_should_be_added(self):
         words = get_all_words()
