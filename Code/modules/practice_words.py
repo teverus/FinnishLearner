@@ -1,5 +1,5 @@
 from Code.ItemTypeClasses import Word
-from Code.constants import SCREEN_WIDTH, ExitCodes
+from Code.constants import SCREEN_WIDTH, ExitCodes, ItemType
 from Code.functions.db import get_all_words, update_item_score
 from Code.functions.general import check_answer, get_stats, get_random_item
 from Code.tables.Table import Table
@@ -87,10 +87,17 @@ class PracticeWords:
         show_run_statistics(self)
 
         if self.incorrect_answers:
-            incorrect_answers = [
-                list(self.incorrect_answers[key].values())
-                for key, value in self.incorrect_answers.items()
-            ]
+            incorrect_answers = []
+
+            for key, value in self.incorrect_answers.items():
+                if self.item.item_type == ItemType.VERB:
+                    verb, correct, incorrect = self.incorrect_answers[key].values()
+                    verb = verb.split("[")[0].strip().strip("(").strip(")")
+                    result = [verb, correct, incorrect]
+                else:
+                    result = list(self.incorrect_answers[key].values())
+
+                incorrect_answers.append(result)
 
             Table(
                 headers=["English", "Correct", "Incorrect"],

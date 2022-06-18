@@ -2,10 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 
 from Code.ItemTypeClasses import VerbForm
-from Code.functions.general import get_stats, get_random_item, check_answer
-from Code.tables.Table import Table
 from Code.constants import *
 from Code.functions.db import get_all_words, save_verb_forms, update_item_score
+from Code.functions.general import get_stats, get_random_item, check_answer
 from Code.functions.ui import (
     show_title_head,
     show_run_statistics,
@@ -14,6 +13,7 @@ from Code.functions.ui import (
     create_a_border,
     create_a_title, get_user_choice,
 )
+from Code.tables.Table import Table
 
 
 class PracticeVerbs:
@@ -90,12 +90,16 @@ class PracticeVerbs:
 
         if self.incorrect_answers:
             incorrect_answers = []
+
             for key, value in self.incorrect_answers.items():
                 if self.item.item_type == ItemType.VERB:
-                    # TODO отрубать инфинитив
-                    a = 1
+                    verb, correct, incorrect = self.incorrect_answers[key].values()
+                    verb = verb.split("[")[0].strip().strip("(").strip(")")
+                    result = [verb, correct, incorrect]
                 else:
-                    incorrect_answers.append(list(self.incorrect_answers[key].values()))
+                    result = list(self.incorrect_answers[key].values())
+
+                incorrect_answers.append(result)
 
             # TODO вынести таблицу в отдельный класс
             Table(
