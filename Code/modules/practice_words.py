@@ -99,6 +99,7 @@ class PracticeWords:
 
                 incorrect_answers.append(result)
 
+
             Table(
                 headers=["English", "Correct", "Incorrect"],
                 headers_upper=True,

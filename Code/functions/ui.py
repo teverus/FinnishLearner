@@ -192,13 +192,13 @@ def show_translate_prompt(word: str):
     print(f"\n English: {word}")
 
 
-def get_answer(main, word=True, verb=False):
+def get_answer(main):
     max_width = 31
 
     print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
     print(f"{'-' * 33}+{'-' * 35}")
 
-    if word:
+    if main.item.item_type == ItemType.WORD:
         if len(main.item.english) > max_width:
             tail = main.item.english[-3:]
             head = main.item.english[: (max_width - len(tail) - 1)]
@@ -208,7 +208,7 @@ def get_answer(main, word=True, verb=False):
 
         answer = input(f" {target_word} | >>> ").strip()
 
-    if verb:
+    if main.item.item_type == ItemType.VERB:
         characteristics = main.item.english.split("(")[1].split(")")[0].center(31)
         pronoun_infinitive = main.item.english.split(")")[-1].strip()
 

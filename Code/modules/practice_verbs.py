@@ -41,7 +41,7 @@ class PracticeVerbs:
             show_run_statistics(self)
             show_word_tiers(self.stats)
 
-            answer = get_answer(self, word=False, verb=True)
+            answer = get_answer(self)
             create_a_border("=")
 
             if answer:
