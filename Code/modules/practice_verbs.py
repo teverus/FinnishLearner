@@ -4,14 +4,20 @@ from bs4 import BeautifulSoup
 from Code.ItemTypeClasses import VerbForm
 from Code.constants import *
 from Code.functions.db import get_all_words, save_verb_forms, update_item_score
-from Code.functions.general import get_stats, get_random_item, check_answer
+from Code.functions.general import (
+    get_stats,
+    get_random_item,
+    check_answer,
+    get_incorrect_answers,
+)
 from Code.functions.ui import (
     show_title_head,
     show_run_statistics,
     show_word_tiers,
     get_answer,
     create_a_border,
-    create_a_title, get_user_choice,
+    create_a_title,
+    get_user_choice,
 )
 from Code.tables.EndRunActionsTable import EndRunActionsTable
 from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
@@ -30,6 +36,7 @@ class PracticeVerbs:
 
         self.set_up()
         self.run()
+        self.tear_down()
 
     def set_up(self):
         self.check_if_new_verbs_should_be_added()
@@ -56,7 +63,13 @@ class PracticeVerbs:
             else:
                 break
 
-        self.show_results()
+    def tear_down(self):
+        create_a_title("Your results")
+        show_run_statistics(self)
+
+        if self.incorrect_answers:
+            incorrect_answers = get_incorrect_answers(self)
+            IncorrectAnswersTable(incorrect_answers)
 
         available_options = EndRunActionsTable(self).available_options
         user_choice = get_user_choice(available_options)
@@ -71,25 +84,6 @@ class PracticeVerbs:
             }
             self.result = options[user_choice]
             return
-
-    def show_results(self):
-        create_a_title("Your results")
-        show_run_statistics(self)
-
-        if self.incorrect_answers:
-            incorrect_answers = []
-
-            for key, value in self.incorrect_answers.items():
-                if self.item.item_type == ItemType.VERB:
-                    verb, correct, incorrect = self.incorrect_answers[key].values()
-                    verb = verb.split("[")[0].strip().strip("(").strip(")")
-                    result = [verb, correct, incorrect]
-                else:
-                    result = list(self.incorrect_answers[key].values())
-
-                incorrect_answers.append(result)
-
-            IncorrectAnswersTable(incorrect_answers)
 
     def check_if_new_verbs_should_be_added(self):
         words = get_all_words()

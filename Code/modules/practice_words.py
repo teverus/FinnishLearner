@@ -1,7 +1,12 @@
 from Code.ItemTypeClasses import Word
 from Code.constants import SCREEN_WIDTH, ExitCodes, ItemType
 from Code.functions.db import get_all_words, update_item_score
-from Code.functions.general import check_answer, get_stats, get_random_item
+from Code.functions.general import (
+    check_answer,
+    get_stats,
+    get_random_item,
+    get_incorrect_answers,
+)
 from Code.tables.EndRunActionsTable import EndRunActionsTable
 from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 from Code.tables.Table import Table
@@ -28,6 +33,7 @@ class PracticeWords:
 
         self.set_up()
         self.run()
+        self.tear_down()
 
     def set_up(self):
         pass
@@ -54,7 +60,13 @@ class PracticeWords:
             else:
                 break
 
-        self.show_results()
+    def tear_down(self):
+        create_a_title("Your results")
+        show_run_statistics(self)
+
+        if self.incorrect_answers:
+            incorrect_answers = get_incorrect_answers(self)
+            IncorrectAnswersTable(incorrect_answers)
 
         available_options = EndRunActionsTable(self).available_options
         user_choice = get_user_choice(available_options)
@@ -69,25 +81,6 @@ class PracticeWords:
             }
             self.result = options[user_choice]
             return
-
-    def show_results(self):
-        create_a_title("Your results")
-        show_run_statistics(self)
-
-        if self.incorrect_answers:
-            incorrect_answers = []
-
-            for key, value in self.incorrect_answers.items():
-                if self.item.item_type == ItemType.VERB:
-                    verb, correct, incorrect = self.incorrect_answers[key].values()
-                    verb = verb.split("[")[0].strip().strip("(").strip(")")
-                    result = [verb, correct, incorrect]
-                else:
-                    result = list(self.incorrect_answers[key].values())
-
-                incorrect_answers.append(result)
-
-            IncorrectAnswersTable(incorrect_answers)
 
 
 if __name__ == "__main__":

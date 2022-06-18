@@ -196,3 +196,21 @@ def find_item_in_db(main, df: DataFrame):
         return item
     else:
         raise Exception("\n[ERROR] Couldn't find an item in db")
+
+
+def get_incorrect_answers(main):
+    incorrect_answers = []
+
+    for key, value in main.incorrect_answers.items():
+        if main.item.item_type == ItemType.VERB:
+            verb, correct, incorrect = main.incorrect_answers[key].values()
+            verb = verb.split("[")[0].strip().strip("(").strip(")")
+            result = [verb, correct, incorrect]
+        elif main.item.item_type == ItemType.WORD:
+            result = list(main.incorrect_answers[key].values())
+        else:
+            raise Exception("\n[ERROR] Unknown item_type")
+
+        incorrect_answers.append(result)
+
+    return incorrect_answers
