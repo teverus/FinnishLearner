@@ -2,6 +2,7 @@ from Code.ItemTypeClasses import Word
 from Code.constants import SCREEN_WIDTH, ExitCodes, ItemType
 from Code.functions.db import get_all_words, update_item_score
 from Code.functions.general import check_answer, get_stats, get_random_item
+from Code.tables.EndRunActionsTable import EndRunActionsTable
 from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 from Code.tables.Table import Table
 from Code.functions.ui import (
@@ -55,21 +56,7 @@ class PracticeWords:
 
         self.show_results()
 
-        available_options = Table(
-            headers=["What would you like to do next?"],
-            headers_centered=True,
-            rows=[
-                "Start a new run",
-                'Go to "Settings"',
-                "Go to main menu",
-                "Exit the application",
-            ],
-            custom_index={"Exit the application": 0},
-            border_headers_top=False,
-            border_rows_bottom="=",
-            table_width=SCREEN_WIDTH,
-            index_column_width=len(str(len(self.incorrect_answers))),
-        ).available_options
+        available_options = EndRunActionsTable(self).available_options
         user_choice = get_user_choice(available_options)
 
         if user_choice == "0":
