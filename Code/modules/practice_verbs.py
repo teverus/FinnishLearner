@@ -1,7 +1,6 @@
 from Code.ItemTypeClasses import VerbForm
-from Code.constants import *
+from Code.constants import ExitCodes, ALL_VERBS
 from Code.functions.db import update_item_score
-from Code.functions.high_level import get_all_words
 from Code.functions.general import (
     get_stats,
     get_random_item,
@@ -9,6 +8,7 @@ from Code.functions.general import (
     get_incorrect_answers,
     check_if_new_verbs_should_be_added,
 )
+from Code.functions.high_level import get_all_words
 from Code.functions.ui import (
     show_title_head,
     show_run_statistics,
@@ -37,6 +37,7 @@ class PracticeVerbs:
         self.tear_down()
 
     def set_up(self):
+        # TODO check if new ITEMS should be added
         check_if_new_verbs_should_be_added(self)
 
     def run(self):

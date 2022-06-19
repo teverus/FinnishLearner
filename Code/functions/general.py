@@ -220,7 +220,7 @@ def get_incorrect_answers(main):
 
 
 def check_if_new_verbs_should_be_added(main):
-    words = get_all_words()
+    words = get_all_words(ALL_WORDS)
     verbs = words.loc[words.PartOfSpeech == "verb"]
     verb_list = list(verbs.Finnish.values)
 

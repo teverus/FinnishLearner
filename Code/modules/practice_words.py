@@ -1,16 +1,13 @@
 from Code.ItemTypeClasses import Word
-from Code.constants import SCREEN_WIDTH, ExitCodes, ItemType
+from Code.constants import ExitCodes, ALL_WORDS
 from Code.functions.db import update_item_score
-from Code.functions.high_level import get_all_words
 from Code.functions.general import (
     check_answer,
     get_stats,
     get_random_item,
     get_incorrect_answers,
 )
-from Code.tables.EndRunActionsTable import EndRunActionsTable
-from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
-from Code.tables.Table import Table
+from Code.functions.high_level import get_all_words
 from Code.functions.ui import (
     create_a_title,
     show_run_statistics,
@@ -20,11 +17,13 @@ from Code.functions.ui import (
     get_user_choice,
     create_a_border,
 )
+from Code.tables.EndRunActionsTable import EndRunActionsTable
+from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 
 
 class PracticeWords:
     def __init__(self, words_per_run):
-        self.snapshot = get_all_words()
+        self.snapshot = get_all_words(ALL_WORDS)
         self.stats = get_stats(self.snapshot)
         self.answer = None
         self.incorrect_answers = {}
@@ -37,6 +36,7 @@ class PracticeWords:
         self.tear_down()
 
     def set_up(self):
+
         pass
 
     def run(self):

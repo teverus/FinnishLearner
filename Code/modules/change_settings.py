@@ -65,7 +65,8 @@ class ChangeSettings:
 
     @staticmethod
     def reset_scores(_):
-        df = get_all_words()
+        # TODO возможность сбрасывать и счет глаголов
+        df = get_all_words(ALL_WORDS)
         df.loc[:, SCORE] = 0
         df.to_excel(ALL_WORDS, index=False)
 
