@@ -6,7 +6,7 @@ from Code.functions.general import (
     get_random_item,
     check_answer,
     get_incorrect_answers,
-    check_if_new_verbs_should_be_added,
+    check_if_new_items_should_be_added,
 )
 from Code.functions.high_level import get_all_words
 from Code.functions.ui import (
@@ -37,8 +37,7 @@ class PracticeVerbs:
         self.tear_down()
 
     def set_up(self):
-        # TODO check if new ITEMS should be added
-        check_if_new_verbs_should_be_added(self)
+        check_if_new_items_should_be_added(self)
 
     def run(self):
         for index in range(1, self.item.per_run + 1):
@@ -54,11 +53,8 @@ class PracticeVerbs:
 
             if answer:
                 score_delta = check_answer(self)
-
                 update_item_score(self, score_delta)
-
                 input("""\n Press "Enter" to continue...""")
-
             else:
                 break
 

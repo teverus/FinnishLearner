@@ -219,7 +219,12 @@ def get_incorrect_answers(main):
     return incorrect_answers
 
 
-def check_if_new_verbs_should_be_added(main):
+def check_if_new_items_should_be_added(main):
+    if main.item.item_type == ItemType.VERB:
+        add_new_verbs()
+
+
+def add_new_verbs():
     words = get_all_words(ALL_WORDS)
     verbs = words.loc[words.PartOfSpeech == "verb"]
     verb_list = list(verbs.Finnish.values)
