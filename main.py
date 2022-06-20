@@ -19,34 +19,33 @@ class FinnishWordsLearner:
 
         self.options = {
             "1": PracticeWords,
-            "2": PracticeSentences,
-            "3": PracticeVerbs,
+            "2": PracticeVerbs,
+            "3": PracticeSentences,
             "4": ChangeSettings,
             "0": exit,
             "00": self.show_welcome_screen,
         }
 
-        self.stats = {
-            "1": self.words_per_run,
-            "2": self.sentences_per_run,
-            "3": self.verbs_per_run,
-            "4": None,
-        }
-
         choice = self.show_welcome_screen()
 
         while True:
-            self.get_values_per_run()
+            self.stats = self.get_values_per_run()
 
             choice = self.options[choice]() if choice in ["0", "00"] else choice
-
             module = self.options[choice](self.stats[choice])
             choice = module.result
 
     def get_values_per_run(self):
         self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
-        self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
         self.verbs_per_run = int(CONFIG[Settings.VERBS_PER_RUN])
+        self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
+
+        return {
+            "1": self.words_per_run,
+            "2": self.verbs_per_run,
+            "3": self.sentences_per_run,
+            "4": None,
+        }
 
     def show_welcome_screen(self):
         clear_console()
@@ -56,8 +55,8 @@ class FinnishWordsLearner:
             headers_centered=True,
             rows=[
                 ["Practice words", self.words_per_run],
-                ["Practice sentences", self.sentences_per_run],
                 ["Practice verbs", self.verbs_per_run],
+                ["Practice sentences", self.sentences_per_run],
                 ["Settings"],
                 ["Exit"],
             ],
