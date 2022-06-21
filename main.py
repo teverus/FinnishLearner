@@ -11,11 +11,12 @@ from Code.functions.ui import (
 
 
 # noinspection PyAttributeOutsideInit
+from Code.tables.WelcomeTable import WelcomeTable
+
+
 class FinnishWordsLearner:
     def __init__(self):
         super(FinnishWordsLearner, self).__init__()
-
-        self.get_values_per_run()
 
         self.options = {
             "1": PracticeWords,
@@ -29,10 +30,10 @@ class FinnishWordsLearner:
         choice = self.show_welcome_screen()
 
         while True:
-            self.stats = self.get_values_per_run()
+            self.values_per_run = self.get_values_per_run()
 
             choice = self.options[choice]() if choice in ["0", "00"] else choice
-            module = self.options[choice](self.stats[choice])
+            module = self.options[choice](self.values_per_run[choice])
             choice = module.result
 
     def get_values_per_run(self):
@@ -49,23 +50,8 @@ class FinnishWordsLearner:
 
     def show_welcome_screen(self):
         clear_console()
-        available_options = Table(
-            table_title=WELCOME_MESSAGE,
-            headers=["Option", "Words/sentences to practice"],
-            headers_centered=True,
-            rows=[
-                ["Practice words", self.words_per_run],
-                ["Practice verbs", self.verbs_per_run],
-                ["Practice sentences", self.sentences_per_run],
-                ["Settings"],
-                ["Exit"],
-            ],
-            custom_index={"Exit": 0},
-            rows_centered=True,
-            table_width=SCREEN_WIDTH,
-            border_headers_top="=",
-            border_rows_bottom="=",
-        ).available_options
+        self.get_values_per_run()
+        available_options = WelcomeTable(self).available_options
 
         user_choice = get_user_choice(available_options)
 
