@@ -1,14 +1,12 @@
-from Code.modules.practice_sentences import PracticeSentences
-from Code.tables.Table import Table
-from Code.constants import CONFIG, Settings, WELCOME_MESSAGE, SCREEN_WIDTH
-from Code.modules.change_settings import ChangeSettings
-from Code.modules.practice_verbs import PracticeVerbs
-from Code.modules.practice_words import PracticeWords
+from Code.constants import CONFIG, Settings
 from Code.functions.ui import (
     get_user_choice,
     clear_console,
 )
-
+from Code.modules.change_settings import ChangeSettings
+from Code.modules.practice_sentences import PracticeSentences
+from Code.modules.practice_verbs import PracticeVerbs
+from Code.modules.practice_words import PracticeWords
 
 # noinspection PyAttributeOutsideInit
 from Code.tables.WelcomeTable import WelcomeTable
@@ -18,41 +16,39 @@ class FinnishWordsLearner:
     def __init__(self):
         super(FinnishWordsLearner, self).__init__()
 
-        self.options = {
-            "1": PracticeWords,
-            "2": PracticeVerbs,
-            "3": PracticeSentences,
-            "4": ChangeSettings,
-            "0": exit,
-            "00": self.show_welcome_screen,
-        }
-
         choice = self.show_welcome_screen()
 
         while True:
-            self.values_per_run = self.get_values_per_run()
+            options = self.get_options()
+            function = options[choice][1] if len(options[choice]) >= 2 else None
+            arguments = options[choice][2] if len(options[choice]) >= 3 else None
 
-            choice = self.options[choice]() if choice in ["0", "00"] else choice
-            module = self.options[choice](self.values_per_run[choice])
-            choice = module.result
+            if choice == "0":
+                function()
+            elif choice == "00":
+                choice = options[choice][0]()
+            elif choice == "4":
+                choice = function().result
+            else:
+                choice = function(arguments).result
 
-    def get_values_per_run(self):
-        self.words_per_run = int(CONFIG[Settings.WORDS_PER_RUN])
-        self.verbs_per_run = int(CONFIG[Settings.VERBS_PER_RUN])
-        self.sentences_per_run = int(CONFIG[Settings.SENTENCES_PER_RUN])
-
+    def get_options(self):
         return {
-            "1": self.words_per_run,
-            "2": self.verbs_per_run,
-            "3": self.sentences_per_run,
-            "4": None,
+            "1": ["Practice words", PracticeWords, int(CONFIG[Settings.WORDS_PER_RUN])],
+            "2": ["Practice verbs", PracticeVerbs, int(CONFIG[Settings.VERBS_PER_RUN])],
+            "3": [
+                "Practice sentences",
+                PracticeSentences,
+                int(CONFIG[Settings.SENTENCES_PER_RUN]),
+            ],
+            "4": ["Settings", ChangeSettings],
+            "0": ["Exit", exit],
+            "00": [self.show_welcome_screen],
         }
 
     def show_welcome_screen(self):
         clear_console()
-        self.get_values_per_run()
-        available_options = WelcomeTable(self).available_options
-
+        available_options = WelcomeTable(self.get_options()).available_options
         user_choice = get_user_choice(available_options)
 
         return user_choice
