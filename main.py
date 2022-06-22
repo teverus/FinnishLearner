@@ -19,14 +19,12 @@ class FinnishWordsLearner:
         choice = self.show_welcome_screen()
 
         while True:
-            options = self.get_options()
-            function = options[choice][1] if len(options[choice]) >= 2 else None
-            arguments = options[choice][2] if len(options[choice]) >= 3 else None
+            opts = self.get_options()
+            function = opts[choice][1] if len(opts[choice]) >= 2 else opts[choice][0]
+            arguments = opts[choice][2] if len(opts[choice]) >= 3 else None
 
-            if choice == "0":
-                function()
-            elif choice == "00":
-                choice = options[choice][0]()
+            if choice in ["0", "00"]:
+                choice = function()
             elif choice == "4":
                 choice = function().result
             else:
@@ -48,7 +46,8 @@ class FinnishWordsLearner:
 
     def show_welcome_screen(self):
         clear_console()
-        available_options = WelcomeTable(self.get_options()).available_options
+        options = self.get_options()
+        available_options = WelcomeTable(options).available_options
         user_choice = get_user_choice(available_options)
 
         return user_choice
