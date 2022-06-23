@@ -29,7 +29,7 @@ class PracticeSentences:
         show_run_statistics(self.stats, Settings.SENTENCES_PER_RUN)
 
     def choose_a_construction(self):
-        # TODO надо убирать уже выбранные
+        # надо убирать уже выбранные
         return random.choice(self.constructions)
 
     def display_the_sentence(self, sentence):
