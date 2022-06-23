@@ -27,7 +27,7 @@ class FinnishWordsLearner:
             elif len(selected) == 2:
                 choice = selected[1]().result
             elif len(selected) == 3:
-                choice = selected[1](selected[2])().result
+                choice = selected[1](selected[2]).result
 
     def get_options(self):
         # [function]
