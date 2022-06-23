@@ -17,13 +17,7 @@ class ChangeSettings:
         clear_console()
         available_options = SettingsTable().available_options
 
-        # TODO создавать словарь, где первые ключи - по числу настроек в файле settings
-        mode = {
-            "1": self.change_setting,
-            "2": self.change_setting,
-            "3": self.change_setting,
-            "4": self.reset_scores,
-        }
+        mode = self.get_mode()
 
         while True:
             user_choice = get_user_choice(available_options)
@@ -63,6 +57,10 @@ class ChangeSettings:
         print(" ")
         print_a_message("Scores were set to zero", centered=True, border="=")
 
+    def get_mode(self):
+        number = len(CONFIG.keys())
+        change = {str(i + 1): self.change_setting for i in range(number)}
+        reset = {str(i + 1 + number): self.reset_scores for i in range(number)}
+        reset_all = {str((number * 2) + 1): self.reset_scores}
 
-if __name__ == "__main__":
-    ChangeSettings()
+        return {**change, **reset, **reset_all}

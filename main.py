@@ -23,7 +23,7 @@ class FinnishWordsLearner:
             selected = options[choice]
 
             if len(selected) == 1:
-                selected[0]()
+                choice = selected[0]()
             elif len(selected) == 2:
                 choice = selected[1]().result
             elif len(selected) == 3:
