@@ -19,18 +19,20 @@ class FinnishWordsLearner:
         choice = self.show_welcome_screen()
 
         while True:
-            opts = self.get_options()
-            function = opts[choice][1] if len(opts[choice]) >= 2 else opts[choice][0]
-            arguments = opts[choice][2] if len(opts[choice]) >= 3 else None
+            options = self.get_options()
+            selected = options[choice]
 
-            if choice in ["0", "00"]:
-                choice = function()
-            elif choice == "4":
-                choice = function().result
-            else:
-                choice = function(arguments).result
+            if len(selected) == 1:
+                selected[0]()
+            elif len(selected) == 2:
+                choice = selected[1]().result
+            elif len(selected) == 3:
+                choice = selected[1](selected[2])().result
 
     def get_options(self):
+        # [function]
+        # ["Display name", function]
+        # ["Display name", function, arguments]
         return {
             "1": ["Practice words", PracticeWords, int(CONFIG[Settings.WORDS_PER_RUN])],
             "2": ["Practice verbs", PracticeVerbs, int(CONFIG[Settings.VERBS_PER_RUN])],

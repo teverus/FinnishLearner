@@ -1,34 +1,24 @@
 from Code.constants import *
 from Code.functions.high_level import get_all_words
-from Code.tables.Table import Table
 from Code.functions.ui import (
     get_user_choice,
     print_a_message,
     clear_console,
 )
+from Code.tables.SettingsTable import SettingsTable
 
 
 class ChangeSettings:
-    def __init__(self, *args):
+    def __init__(self):
         self.result = None
         self.run()
 
     def run(self):
         clear_console()
-        available_options = Table(
-            headers=["Name", "Value"],
-            rows=[[key.capitalize(), value] for key, value in CONFIG.items()]
-            + ["Exit the application", "Go back"],
-            custom_index={"Exit the application": 0, "Go back": "00"},
-            headers_centered=True,
-            rows_centered=True,
-            table_width=SCREEN_WIDTH,
-            table_title="Settings",
-            border_headers_top="=",
-            border_rows_bottom="=",
-        ).available_options
+        available_options = SettingsTable().available_options
 
-        options = {
+        # TODO создавать словарь, где первые ключи - по числу настроек в файле settings
+        mode = {
             "1": self.change_setting,
             "2": self.change_setting,
             "3": self.change_setting,
@@ -43,7 +33,7 @@ class ChangeSettings:
                 self.result = ExitCodes.SHOW_WELCOME_SCREEN
                 return
             else:
-                options[user_choice](user_choice)
+                mode[user_choice](user_choice)
 
     @staticmethod
     def change_setting(user_choice):
