@@ -14,8 +14,8 @@ class EndRunActionsTable(Table):
                 "Exit the application",
             ],
             custom_index={"Exit the application": 0},
-            border_headers_top=False,
-            border_rows_bottom="=",
+            headers_border_top=False,
+            rows_border_bottom="=",
             table_width=SCREEN_WIDTH,
             index_column_width=len(str(len(main.incorrect_answers))),
         )

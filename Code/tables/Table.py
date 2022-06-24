@@ -4,20 +4,24 @@ from typing import Union
 class Table:
     def __init__(
         self,
+        # Rows
         rows: list,
         rows_centered: bool = False,
+        rows_border_top: str = "-",
+        rows_border_bottom: str = "-",
+        # Headers
         headers: list = (),
         headers_centered: bool = False,
         headers_upper: bool = False,
-        border_headers_top: Union[str, bool] = "-",
-        border_rows_top: str = "-",
-        border_rows_bottom: str = "-",
-        table_width: int = 0,
+        headers_border_top: Union[str, bool] = "-",
+        # Table title
         table_title: str = "",
         table_title_upper: bool = True,
         table_title_centered: bool = True,
+        # Table
+        table_width: int = 0,
         show_index: bool = True,
-        column_border: str = "|",
+        column_wall: str = "|",
         custom_index: dict = None,
         index_column_width: Union[dict, int] = None
     ):
@@ -25,23 +29,27 @@ class Table:
         # Rows
         self.rows = self.convert_rows(rows)
         self.rows_centered = rows_centered
-        self.rows_border_top = border_rows_top
-        self.rows_border_bottom = border_rows_bottom
+        self.rows_border_top = rows_border_top
+        self.rows_border_bottom = rows_border_bottom
 
         # Headers
         self.headers = [headers]
         self.headers_centered = headers_centered
-        self.headers_top_border = border_headers_top
+        self.headers_border_top = headers_border_top
         self.headers_upper = headers_upper
 
-        # Table
+        # Table title
         self.table_title = table_title
         self.table_title_upper = table_title_upper
         self.table_title_centered = table_title_centered
+
+        # Table
         self.width_total = table_width
         self.show_index = show_index
-        self.column_wall = column_border
+        self.column_wall = column_wall
         self.custom_index = custom_index
+
+        # Returned values
         self.available_options = []
 
         # === Calculated values
@@ -185,12 +193,12 @@ class Table:
 
     def print_the_table(self):
         headers = self.headers[0]
-        headers_top = self.headers_top_border * self.width_total if headers else ""
+        headers_top = self.headers_border_top * self.width_total if headers else ""
         table_top = self.get_table_top()
         table_bottom = self.rows_border_bottom * self.width_total
 
         if self.table_title:
-            if self.headers_top_border:
+            if self.headers_border_top:
                 print(headers_top)
             tt = self.table_title
             tt = tt.upper() if self.table_title_upper else tt
@@ -198,10 +206,10 @@ class Table:
             print(tt)
 
         if headers:
-            if self.headers_top_border:
+            if self.headers_border_top:
                 print(headers_top)
             print(headers)
-            head_list = [headers_top, headers] if self.headers_top_border else [headers]
+            head_list = [headers_top, headers] if self.headers_border_top else [headers]
             [self.table.append(element) for element in head_list]
 
         if self.rows_border_top:

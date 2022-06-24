@@ -11,6 +11,6 @@ class IncorrectAnswersTable(Table):
             rows=incorrect_answers,
             rows_centered=True,
             table_width=SCREEN_WIDTH,
-            border_headers_top=False,
-            border_rows_bottom="=",
+            headers_border_top=False,
+            rows_border_bottom="=",
         )

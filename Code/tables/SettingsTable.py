@@ -16,6 +16,6 @@ class SettingsTable(Table):
             rows_centered=True,
             table_width=SCREEN_WIDTH,
             table_title="Settings",
-            border_headers_top="=",
-            border_rows_bottom="=",
+            headers_border_top="=",
+            rows_border_bottom="=",
         )

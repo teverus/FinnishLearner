@@ -20,6 +20,6 @@ class WelcomeTable(Table):
             custom_index={"Exit": 0},
             rows_centered=True,
             table_width=SCREEN_WIDTH,
-            border_headers_top="=",
-            border_rows_bottom="=",
+            headers_border_top="=",
+            rows_border_bottom="=",
         )
