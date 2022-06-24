@@ -35,6 +35,9 @@ VERB_FORMS = [
 ]
 
 
+item_type_to_excel_file = {"words": ALL_WORDS, "verbs": ALL_VERBS}
+
+
 class Settings:
     WORDS_PER_RUN = "words per run"
     SENTENCES_PER_RUN = "sentences per run"
@@ -121,5 +124,5 @@ PERSONAL_PRONOUNS = {
     "3 Singular": "hän",
     "1 Plural": "me",
     "2 Plural": "te",
-    "3 Plural": "he"
+    "3 Plural": "he",
 }

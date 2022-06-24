@@ -10,14 +10,13 @@ from Code.tables.SettingsTable import SettingsTable
 
 class ChangeSettings:
     def __init__(self):
+        self.options = self.get_options()
         self.result = None
         self.run()
 
     def run(self):
         clear_console()
         available_options = SettingsTable().available_options
-
-        mode = self.get_mode()
 
         while True:
             user_choice = get_user_choice(available_options)
@@ -27,7 +26,7 @@ class ChangeSettings:
                 self.result = ExitCodes.SHOW_WELCOME_SCREEN
                 return
             else:
-                mode[user_choice](user_choice)
+                self.options[user_choice](user_choice)
 
     @staticmethod
     def change_setting(user_choice):
@@ -48,16 +47,24 @@ class ChangeSettings:
         )
 
     @staticmethod
-    def reset_scores(_):
-        # TODO возможность сбрасывать и счет глаголов
-        df = get_all_words(ALL_WORDS)
+    def reset_scores(user_choice):
+        available_options = list(CONFIG.keys())
+        proper_index = int(user_choice) - len(available_options)
+        proper_option = available_options[proper_index - 1].split()[0]
+        proper_file = item_type_to_excel_file[proper_option]
+
+        df = get_all_words(proper_file)
         df.loc[:, SCORE] = 0
-        df.to_excel(ALL_WORDS, index=False)
+        df.to_excel(proper_file, index=False)
 
         print(" ")
-        print_a_message("Scores were set to zero", centered=True, border="=")
+        print_a_message(
+            f"{proper_option.capitalize()} scores were set to zero",
+            centered=True,
+            border="=",
+        )
 
-    def get_mode(self):
+    def get_options(self):
         number = len(CONFIG.keys())
         change = {str(i + 1): self.change_setting for i in range(number)}
         reset = {str(i + 1 + number): self.reset_scores for i in range(number)}
