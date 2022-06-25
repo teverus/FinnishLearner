@@ -37,9 +37,9 @@ class FinnishWordsLearner:
             "1": ["Practice words", PracticeWords, int(CONFIG[Settings.WORDS_PER_RUN])],
             "2": ["Practice verbs", PracticeVerbs, int(CONFIG[Settings.VERBS_PER_RUN])],
             "3": [
-                "Practice sentences",
+                "Practice word combinations",
                 PracticeSentences,
-                int(CONFIG[Settings.SENTENCES_PER_RUN]),
+                int(CONFIG[Settings.WORD_COMBINATIONS_PER_RUN]),
             ],
             "4": ["Settings", ChangeSettings],
             "0": ["Exit", exit],

@@ -17,6 +17,8 @@ class PracticeSentences:
         self.run()
 
     def run(self):
+        print("Work in progress... Please, do not choose this option")
+        exit(1)
         for index in range(1, self.sentences_per_run + 1):
             self.show_statistics(index)
             specific_construction = self.choose_a_construction()
@@ -26,7 +28,7 @@ class PracticeSentences:
 
     def show_statistics(self, index):
         show_title_head(index, self.sentences_per_run, "SENTENCE", user_tips=False)
-        show_run_statistics(self.stats, Settings.SENTENCES_PER_RUN)
+        show_run_statistics(self.stats, Settings.WORD_COMBINATIONS_PER_RUN)
 
     def choose_a_construction(self):
         # надо убирать уже выбранные

@@ -40,8 +40,8 @@ item_type_to_excel_file = {"words": ALL_WORDS, "verbs": ALL_VERBS}
 
 class Settings:
     WORDS_PER_RUN = "words per run"
-    SENTENCES_PER_RUN = "sentences per run"
     VERBS_PER_RUN = "verbs per run"
+    WORD_COMBINATIONS_PER_RUN = "word combinations per run"
 
 
 class Statistics:
