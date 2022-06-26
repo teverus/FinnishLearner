@@ -221,6 +221,7 @@ def get_incorrect_answers(main):
 
 def check_if_new_items_should_be_added(main):
     if main.item.item_type == ItemType.VERB:
+        # TODO добавить добавление англ
         add_new_verbs(main)
 
 
