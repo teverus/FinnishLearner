@@ -15,7 +15,12 @@ def get_all_words(target_file: str, sort_by=SCORE) -> DataFrame:
 
 
 def save_verb_forms(
-    verb_forms: list, tense: str, infinitive: str, negativity: str, mood: str
+    verb_forms: list,
+    tense: str,
+    infinitive: str,
+    negativity: str,
+    mood: str,
+    english: str,
 ):
     df_orig = pd.read_excel(ALL_VERBS, converters={"Negative": str, "Plural": str})
     df = DataFrame([], columns=VERB_FORMS)
@@ -32,6 +37,7 @@ def save_verb_forms(
             plural.capitalize(),
             0,
             infinitive,
+            english
         ]
 
     df_final = pd.concat([df_orig, df], ignore_index=True)

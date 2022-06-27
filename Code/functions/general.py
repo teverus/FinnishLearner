@@ -276,7 +276,8 @@ def add_new_verbs(main):
                         if verb_form.attrs["data-accel-col"] == index
                     ]
 
-                    save_verb_forms(verb_forms, tense, verb, negativity, mood)
+                    english = verbs.loc[verbs.Finnish == verb, "English"].item()
+                    save_verb_forms(verb_forms, tense, verb, negativity, mood, english)
                     added_verbs.append(verb)
 
     if added_verbs:

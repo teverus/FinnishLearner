@@ -32,6 +32,7 @@ VERB_FORMS = [
     "Plural",
     "Score",
     "Infinitive",
+    "English"
 ]
 
 
