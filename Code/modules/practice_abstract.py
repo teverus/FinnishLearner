@@ -22,7 +22,9 @@ from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 
 
 class PracticeAbstract:
-    def __init__(self, items_per_run, item_object, target_file):
+    def __init__(
+        self, items_per_run, item_object, target_file, horizontal_prompt=False
+    ):
         self.snapshot = get_all_words(target_file)
         self.stats = get_stats(self.snapshot)
         self.answer = None
@@ -30,6 +32,7 @@ class PracticeAbstract:
         self.result = None
         self.index = None
         self.item = item_object(items_per_run)
+        self.horizontal_prompt = horizontal_prompt
 
         self.set_up()
         self.run()

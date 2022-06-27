@@ -102,10 +102,9 @@ def choose_an_item(main):
     elif main.item.item_type == ItemType.VERB:
         main.item.finnish = random_item["Verb form"]
         ri = random_item
-        pronoun = f"{ri.Person} {ri.Plural}"
-        pronoun = PERSONAL_PRONOUNS[pronoun]
+        pronoun = PERSONAL_PRONOUNS[f"{ri.Person} {ri.Plural}"]
         main.item.english = (
-            f"({ri.Mood}|{ri.Tense}|{ri.Negative}) [{ri.Infinitive}] {pronoun} "
+            f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense}) {pronoun}"
         )
 
 
@@ -206,6 +205,7 @@ def get_incorrect_answers(main):
 
     for key, value in main.incorrect_answers.items():
         if main.item.item_type == ItemType.VERB:
+            # TODO правильно парсить
             verb, correct, incorrect = main.incorrect_answers[key].values()
             verb = verb.split("[")[0].strip().strip("(").strip(")")
             result = [verb, correct, incorrect]
@@ -221,7 +221,6 @@ def get_incorrect_answers(main):
 
 def check_if_new_items_should_be_added(main):
     if main.item.item_type == ItemType.VERB:
-        # TODO добавить добавление англ
         add_new_verbs(main)
 
 
