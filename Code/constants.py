@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 
-SCREEN_WIDTH = 69
+# SCREEN_WIDTH = 69
+SCREEN_WIDTH = 100
 WELCOME_MESSAGE = "Welcome to Finnish Learner"
 SETTINGS_FILE = "settings.ini"
 SETTINGS = "settings"

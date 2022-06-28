@@ -1,4 +1,5 @@
 import random
+import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -104,7 +105,7 @@ def choose_an_item(main):
         ri = random_item
         pronoun = PERSONAL_PRONOUNS[f"{ri.Person} {ri.Plural}"]
         main.item.english = (
-            f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense}) {pronoun}"
+            f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense})\n>>> {pronoun}"
         )
 
 
@@ -205,9 +206,8 @@ def get_incorrect_answers(main):
 
     for key, value in main.incorrect_answers.items():
         if main.item.item_type == ItemType.VERB:
-            # TODO правильно парсить
             verb, correct, incorrect = main.incorrect_answers[key].values()
-            verb = verb.split("[")[0].strip().strip("(").strip(")")
+            verb = re.findall(r"\]\s\((.*)\)", verb)[0]
             result = [verb, correct, incorrect]
         elif main.item.item_type == ItemType.WORD:
             result = list(main.incorrect_answers[key].values())
