@@ -125,9 +125,9 @@ def check_answer(main) -> int:
 
         print(" ")
 
-        # TODO масштабируемость
+        column_width = int((SCREEN_WIDTH - 2) / 3)
         print_a_message(
-            f"{'-' * 22}<{'CORRECT ANSWER'.center(22)}>{'-' * 23}", border="="
+            f"{'-' * column_width}<{'CORRECT ANSWER '.center(column_width)}>{'-' * column_width}", border="="
         )
 
     else:
