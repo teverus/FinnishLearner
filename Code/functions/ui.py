@@ -123,9 +123,9 @@ def show_run_statistics(main):
     incorrect_percentage = str(incorrect_percentage).rjust(2, "0").rjust(3)
     total_percentage = str(total_percentage).rjust(2, "0").rjust(3)
 
-    print(f" PASS {correct} |{correct_bar}| {correct_percentage}%")
-    print(f" FAIL {incorrect} |{incorrect_bar}| {incorrect_percentage}%")
-    print(f" DONE {total} |{total_bar}| {total_percentage}%")
+    print(f" PASS{correct} |{correct_bar}| {correct_percentage} %")
+    print(f" FAIL{incorrect} |{incorrect_bar}| {incorrect_percentage} %")
+    print(f" DONE{total} |{total_bar}| {total_percentage} %")
     create_a_border("=")
 
 
