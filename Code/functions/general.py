@@ -125,6 +125,7 @@ def check_answer(main) -> int:
 
         print(" ")
 
+        # TODO масштабируемость
         print_a_message(
             f"{'-' * 22}<{'CORRECT ANSWER'.center(22)}>{'-' * 23}", border="="
         )

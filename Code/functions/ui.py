@@ -15,11 +15,11 @@ def clear_console():
 
 
 def print_a_message(
-    message: Union[str, list],
-    centered: bool = False,
-    upper: bool = False,
-    clear_screen: bool = False,
-    border: str = "-",
+        message: Union[str, list],
+        centered: bool = False,
+        upper: bool = False,
+        clear_screen: bool = False,
+        border: str = "-",
 ):
     clear_console() if clear_screen else do_nothing()
 
@@ -82,7 +82,7 @@ def get_user_choice(available_options: List[str]) -> str:
 def show_run_statistics(main):
     max_elements = {
         ItemType.WORD: Settings.WORDS_PER_RUN,
-        ItemType.VERB: Settings.VERBS_PER_RUN
+        ItemType.VERB: Settings.VERBS_PER_RUN,
     }
     max_elements = max_elements[main.item.item_type]
     stats = main.stats
@@ -102,12 +102,14 @@ def show_run_statistics(main):
         incorrect_percentage = 0
     total_percentage = round(total / words_per_run * 100)
 
-    correct_half = round(correct_percentage / 2)
-    incorrect_half = round(incorrect_percentage / 2)
-    total_half = round(total_percentage / 2)
-    remaining_correct = 50 - correct_half
-    remaining_incorrect = 50 - incorrect_half
-    remaining_total = 50 - total_half
+    space_for_bar = SCREEN_WIDTH - 18
+    modifier = space_for_bar / 100
+    correct_half = round(correct_percentage * modifier)
+    incorrect_half = round(incorrect_percentage * modifier)
+    total_half = round(total_percentage * modifier)
+    remaining_correct = space_for_bar - correct_half
+    remaining_incorrect = space_for_bar - incorrect_half
+    remaining_total = space_for_bar - total_half
 
     correct_bar = f"{WHITE_BLOCK_UPPER * correct_half}{DOT * remaining_correct}"
     incorrect_bar = f"{WHITE_BLOCK_UPPER * incorrect_half}{DOT * remaining_incorrect}"
@@ -154,37 +156,36 @@ def show_title_head(main, user_tips=True):
 
 
 def show_word_tiers(stats: dict):
-    ____ = "".center(Tier.MAX_LENGTH)
-    # max_total = get_longest_total_number(stats)
-    max_total = Tier.MAX_LENGTH + 2
     current_tick = stats[Statistics.CURRENT_TIER]
+    column_width = int((SCREEN_WIDTH - 2) / 3)
+    ____ = "".center(column_width - 4)
 
     print(
-        f" {''.center(Tier.MAX_LENGTH)}   | {'Total'.center(20)} | {'Remaining'.center(20)}"
+        f"{''.center(column_width)}|{'Total'.center(column_width)}|{'Remaining'.center(column_width)}"
     )
-    print(f"{'-' * 20}--+{'-' * 22}+{'-' * 23}")
+    print(f"{'-' * column_width}+{'-' * column_width}+{'-' * column_width}")
 
     for index, (key, value) in enumerate(stats[Statistics.TIERS].items(), 1):
-        name = key.center(Tier.MAX_LENGTH)
+        name = key.center(column_width - 4)
 
-        total_low = f"{value[Tier.LOWER][Tier.TOTAL]}".center(max_total)
-        total_mid = f"{value[Tier.MIDDLE][Tier.TOTAL]}".center(max_total)
-        total_top = f"{value[Tier.UPPER][Tier.TOTAL]}".center(max_total)
+        total_low = f"{value[Tier.LOWER][Tier.TOTAL]}".center(column_width)
+        total_mid = f"{value[Tier.MIDDLE][Tier.TOTAL]}".center(column_width)
+        total_top = f"{value[Tier.UPPER][Tier.TOTAL]}".center(column_width)
 
-        left_low = f"{value[Tier.LOWER][Tier.LEFT]}".center(max_total)
-        left_mid = f"{value[Tier.MIDDLE][Tier.LEFT]}".center(max_total)
-        left_top = f"{value[Tier.UPPER][Tier.LEFT]}".center(max_total)
+        left_low = f"{value[Tier.LOWER][Tier.LEFT]}".center(column_width)
+        left_mid = f"{value[Tier.MIDDLE][Tier.LEFT]}".center(column_width)
+        left_top = f"{value[Tier.UPPER][Tier.LEFT]}".center(column_width)
 
         tick_low = WHITE_BLOCK_FULL if current_tick == [key, Tier.LOWER] else " "
         tick_mid = WHITE_BLOCK_FULL if current_tick == [key, Tier.MIDDLE] else " "
         tick_top = WHITE_BLOCK_FULL if current_tick == [key, Tier.UPPER] else " "
 
-        print(f" {____} |{tick_low}| {total_low} | {left_low}")
-        print(f" {name} |{tick_mid}| {total_mid} | {left_mid}")
-        print(f" {____} |{tick_top}| {total_top} | {left_top}")
+        print(f" {____} |{tick_low}|{total_low}|{left_low}")
+        print(f" {name} |{tick_mid}|{total_mid}|{left_mid}")
+        print(f" {____} |{tick_top}|{total_top}|{left_top}")
 
         if index != len(stats[Statistics.TIERS]):
-            print(f"{'-' * 20}+-+{'-' * 22}+{'-' * 23}")
+            print(f"{'-' * column_width}+{'-' * column_width}+{'-' * column_width}")
         else:
             create_a_border("=")
 
@@ -196,6 +197,7 @@ def show_translate_prompt(word: str):
 def get_answer(main):
     max_width = 31
 
+    # TODO масштабируемость
     if not main.horizontal_prompt:
         print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
         print(f"{'-' * 33}+{'-' * 35}")
@@ -235,16 +237,16 @@ def create_a_settings_table() -> List[str]:
 
 
 def create_a_table_old(
-    headers: list,
-    rows: list,
-    bottom_border: str = "=",
-    center: bool = False,
-    show_exit: bool = True,
-    go_back: bool = False,
-    show_index: bool = True,
-    index_start: int = 1,
-    upper_headers: bool = False,
-    capitalize_rows: bool = True,
+        headers: list,
+        rows: list,
+        bottom_border: str = "=",
+        center: bool = False,
+        show_exit: bool = True,
+        go_back: bool = False,
+        show_index: bool = True,
+        index_start: int = 1,
+        upper_headers: bool = False,
+        capitalize_rows: bool = True,
 ) -> List[str]:
     full_width, remainder, remainder_used = get_paddings(headers)
 

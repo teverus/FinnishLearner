@@ -46,11 +46,8 @@ class PracticeAbstract:
             self.index = index
             get_random_item(self)
 
-            # TODO сделать масштабируемым
             show_title_head(self)
-            # TODO сделать масштабируемым
             show_run_statistics(self)
-            # TODO сделать масштабируемым
             show_word_tiers(self.stats)
 
             answer = get_answer(self)
