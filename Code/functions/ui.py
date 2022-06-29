@@ -123,9 +123,9 @@ def show_run_statistics(main):
     incorrect_percentage = str(incorrect_percentage).rjust(2, "0").rjust(3)
     total_percentage = str(total_percentage).rjust(2, "0").rjust(3)
 
-    print(f" PASS {correct} |{correct_bar}| {correct_percentage} %")
-    print(f" FAIL {incorrect} |{incorrect_bar}| {incorrect_percentage} %")
-    print(f" DONE {total} |{total_bar}| {total_percentage} %")
+    print(f" PASS {correct} |{correct_bar}| {correct_percentage}%")
+    print(f" FAIL {incorrect} |{incorrect_bar}| {incorrect_percentage}%")
+    print(f" DONE {total} |{total_bar}| {total_percentage}%")
     create_a_border("=")
 
 
@@ -195,22 +195,21 @@ def show_translate_prompt(word: str):
 
 
 def get_answer(main):
-    max_width = 31
+    column_width = int((SCREEN_WIDTH - 1) / 2)
 
-    # TODO масштабируемость
     if not main.horizontal_prompt:
-        print(f" {'ENGLISH'.center(31)} | {'FINNISH'.center(31)}")
-        print(f"{'-' * 33}+{'-' * 35}")
+        print(f"{'ENGLISH'.center(column_width)}|{'FINNISH'.center(column_width)}")
+        print(f"{'-' * column_width}+{'-' * column_width}")
 
     if main.item.item_type == ItemType.WORD:
-        if len(main.item.english) > max_width:
+        if len(main.item.english) > column_width:
             tail = main.item.english[-3:]
-            head = main.item.english[: (max_width - len(tail) - 1)]
+            head = main.item.english[: (column_width - len(tail) - 1)]
             target_word = f"{head}~{tail}"
         else:
-            target_word = f"{main.item.english.center(31)}"
+            target_word = f"{main.item.english.center(column_width)}"
 
-        answer = input(f" {target_word} | >>> ").strip()
+        answer = input(f"{target_word}| >>> ").strip()
 
     if main.item.item_type == ItemType.VERB:
         answer = input(f">>> {main.item.english} ").strip()
