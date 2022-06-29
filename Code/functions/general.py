@@ -105,7 +105,7 @@ def choose_an_item(main):
         ri = random_item
         pronoun = PERSONAL_PRONOUNS[f"{ri.Person} {ri.Plural}"]
         main.item.english = (
-            f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense})\n>>> {pronoun}"
+            f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense})\n Finnish: {pronoun}"
         )
 
 

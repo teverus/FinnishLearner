@@ -212,7 +212,7 @@ def get_answer(main):
         answer = input(f"{target_word}| >>> ").strip()
 
     if main.item.item_type == ItemType.VERB:
-        answer = input(f">>> {main.item.english} ").strip()
+        answer = input(f" English: {main.item.english} ").strip()
 
     if answer in ["q", "r"]:
         return False
