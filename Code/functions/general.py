@@ -1,5 +1,6 @@
 import random
 import re
+from typing import Union, List
 
 import requests
 from bs4 import BeautifulSoup
@@ -127,7 +128,8 @@ def check_answer(main) -> int:
 
         column_width = int((SCREEN_WIDTH - 2) / 3)
         print_a_message(
-            f"{'-' * column_width}<{'CORRECT ANSWER '.center(column_width)}>{'-' * column_width}", border="="
+            f"{'-' * column_width}<{'CORRECT ANSWER '.center(column_width)}>{'-' * column_width}",
+            border="="
         )
 
     else:
@@ -223,6 +225,15 @@ def get_incorrect_answers(main):
 def check_if_new_items_should_be_added(main):
     if main.item.item_type == ItemType.VERB:
         add_new_verbs(main)
+
+
+def exclude_item_types(main, excluded_types: Union[List, bool]):
+    modified_df = main.snapshot
+
+    for excluded_type in excluded_types:
+        modified_df = modified_df.loc[modified_df.PartOfSpeech != excluded_type]
+
+    return modified_df
 
 
 def add_new_verbs(main):
