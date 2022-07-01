@@ -10,4 +10,5 @@ class PracticeWordCombinations(PracticeAbstract):
             WordCombination,
             ALL_WORDS,
             include=["adjective", "noun"],
+            simple_stats=True
         )
