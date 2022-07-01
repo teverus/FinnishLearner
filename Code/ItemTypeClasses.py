@@ -17,3 +17,8 @@ class Word(AbstractItem):
 class VerbForm(AbstractItem):
     def __init__(self, per_run):
         super(VerbForm, self).__init__(per_run, ItemType.VERB)
+
+
+class WordCombination(AbstractItem):
+    def __init__(self, per_run):
+        super(WordCombination, self).__init__(per_run, ItemType.COMBINATION)

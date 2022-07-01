@@ -4,8 +4,8 @@ from Code.functions.ui import (
     clear_console,
 )
 from Code.modules.change_settings import ChangeSettings
-from Code.modules.practice_sentences import PracticeSentences
 from Code.modules.practice_verbs import PracticeVerbs
+from Code.modules.practice_word_combinations import PracticeWordCombinations
 from Code.modules.practice_words import PracticeWords
 
 # noinspection PyAttributeOutsideInit
@@ -38,7 +38,7 @@ class FinnishWordsLearner:
             "2": ["Practice verbs", PracticeVerbs, int(CONFIG[Settings.VERBS_PER_RUN])],
             "3": [
                 "Practice word combinations",
-                PracticeSentences,
+                PracticeWordCombinations,
                 int(CONFIG[Settings.WORD_COMBINATIONS_PER_RUN]),
             ],
             "4": ["Settings", ChangeSettings],

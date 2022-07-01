@@ -2,6 +2,7 @@ import random
 import re
 from typing import Union, List
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from pandas import DataFrame
@@ -228,10 +229,28 @@ def check_if_new_items_should_be_added(main):
 
 
 def exclude_item_types(main, excluded_types: Union[List, bool]):
-    modified_df = main.snapshot
+    df = main.snapshot
+    modified_df = None
 
     for excluded_type in excluded_types:
-        modified_df = modified_df.loc[modified_df.PartOfSpeech != excluded_type]
+        if modified_df is None:
+            modified_df = df.loc[df.PartOfSpeech != excluded_type]
+        else:
+            modified_df = modified_df.loc[modified_df.PartOfSpeech != excluded_type]
+
+    return modified_df
+
+
+def include_only_items(main, included_types):
+    df = main.snapshot
+    modified_df = None
+
+    for included_type in included_types:
+        if modified_df is not None:
+            df_ = df.loc[df.PartOfSpeech == included_type]
+            modified_df = pd.concat([modified_df, df_])
+        else:
+            modified_df = df.loc[df.PartOfSpeech == included_type]
 
     return modified_df
 

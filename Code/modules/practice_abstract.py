@@ -6,7 +6,7 @@ from Code.functions.general import (
     get_random_item,
     check_answer,
     get_incorrect_answers,
-    exclude_item_types,
+    exclude_item_types, include_only_items,
 )
 from Code.functions.high_level import get_all_words
 from Code.functions.ui import (
@@ -30,9 +30,11 @@ class PracticeAbstract:
         target_file,
         horizontal_prompt=False,
         exclude=False,
+        include=False,
     ):
         self.snapshot = get_all_words(target_file)
         self.snapshot = exclude_item_types(self, exclude) if exclude else self.snapshot
+        self.snapshot = include_only_items(self, include) if include else self.snapshot
         self.stats = get_stats(self.snapshot)
         self.answer = None
         self.incorrect_answers = {}

@@ -118,6 +118,7 @@ class Tense:
 class ItemType:
     WORD = "WORD"
     VERB = "VERB"
+    COMBINATION = "COMBINATION"
 
 
 PERSONAL_PRONOUNS = {
