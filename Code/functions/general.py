@@ -85,7 +85,7 @@ def choose_an_item(main):
     df = main.snapshot
 
     if main.item.item_type == ItemType.COMBINATION:
-        for element in main.item.pattern:
+        for element in main.item.pattern.keys():
             df_ = df.loc[df.PartOfSpeech == element].groupby(SCORE).groups.keys()
             lowest_score = sorted(list(df_))[0]
 
@@ -97,6 +97,7 @@ def choose_an_item(main):
 
             main.item.english = f"{main.item.english} {random_item.English}"
             main.item.finnish = f"{main.item.finnish} {random_item.Finnish}"
+            main.item.pattern[element] = random_item.Finnish
         main.item.english = main.item.english.strip()
         main.item.finnish = main.item.finnish.strip()
 

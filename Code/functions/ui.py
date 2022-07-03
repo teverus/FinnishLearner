@@ -83,6 +83,7 @@ def show_run_statistics(main):
     max_elements = {
         ItemType.WORD: Settings.WORDS_PER_RUN,
         ItemType.VERB: Settings.VERBS_PER_RUN,
+        ItemType.COMBINATION: Settings.WORD_COMBINATIONS_PER_RUN
     }
     max_elements = max_elements[main.item.item_type]
     stats = main.stats
@@ -156,6 +157,9 @@ def show_title_head(main, user_tips=True):
 
 
 def show_word_tiers(stats: dict):
+    if Statistics.CURRENT_TIER not in stats:
+        return
+
     current_tick = stats[Statistics.CURRENT_TIER]
     column_width = int((SCREEN_WIDTH - 2) / 3)
     ____ = "".center(column_width - 4)
@@ -213,6 +217,9 @@ def get_answer(main):
 
     if main.item.item_type == ItemType.VERB:
         answer = input(f" English: {main.item.english} ").strip()
+
+    if main.item.item_type == ItemType.COMBINATION:
+        answer = input(f"{main.item.english.center(column_width)}| >>> ")
 
     if answer in ["q", "r"]:
         return False
