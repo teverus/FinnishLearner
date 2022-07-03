@@ -43,6 +43,7 @@ class PracticeAbstract:
         self.result = None
         self.index = None
         self.item = item_object(items_per_run)
+        self.item.pattern = include if include else None
         self.horizontal_prompt = horizontal_prompt
 
         self.set_up()

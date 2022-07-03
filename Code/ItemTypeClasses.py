@@ -22,3 +22,4 @@ class VerbForm(AbstractItem):
 class WordCombination(AbstractItem):
     def __init__(self, per_run):
         super(WordCombination, self).__init__(per_run, ItemType.COMBINATION)
+        self.pattern = None

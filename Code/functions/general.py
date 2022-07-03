@@ -84,6 +84,24 @@ def get_random_item(main):
 def choose_an_item(main):
     df = main.snapshot
 
+    if main.item.item_type == ItemType.COMBINATION:
+        for element in main.item.pattern:
+            df_ = df.loc[df.PartOfSpeech == element].groupby(SCORE).groups.keys()
+            lowest_score = sorted(list(df_))[0]
+
+            options = df.loc[(df.PartOfSpeech == element) & (df.Score == lowest_score)]
+            options = options.reset_index()
+
+            random_number = random.randint(0, len(options) - 1)
+            random_item = options.loc[random_number]
+
+            main.item.english = f"{main.item.english} {random_item.English}"
+            main.item.finnish = f"{main.item.finnish} {random_item.Finnish}"
+        main.item.english = main.item.english.strip()
+        main.item.finnish = main.item.finnish.strip()
+
+        return True
+
     current_tier = main.stats[Statistics.CURRENT_TIER]
     max_score = [_ for _, value in SCORE_TO_TIER.items() if value == current_tier][0]
 
