@@ -1,5 +1,8 @@
 from configparser import ConfigParser
 
+ENGLISH = "English"
+FINNISH = "Finnish"
+
 # SCREEN_WIDTH = 69
 SCREEN_WIDTH = 101
 WELCOME_MESSAGE = "Welcome to Finnish Learner"

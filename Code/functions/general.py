@@ -7,7 +7,26 @@ import requests
 from bs4 import BeautifulSoup
 from pandas import DataFrame
 
-from Code.constants import *
+from Code.constants import (
+    COUNT,
+    SCORE,
+    SCORE_TO_TIER,
+    Statistics,
+    Tier,
+    ItemType,
+    ENGLISH,
+    FINNISH,
+    PERSONAL_PRONOUNS,
+    ALL_TIERS,
+    SCREEN_WIDTH,
+    Word,
+    ALL_WORDS,
+    POSITIVE,
+    NEGATIVE,
+    Tense,
+    Mood,
+    ALL_VERBS,
+)
 from Code.functions.high_level import get_all_words, save_verb_forms
 from Code.functions.ui import print_a_message
 
@@ -34,10 +53,7 @@ def get_stats(df: DataFrame, simple=False) -> dict:
 
 def get_stats_dict(simple) -> dict:
     if simple:
-        return {
-            Statistics.CORRECT: 0,
-            Statistics.INCORRECT: 0
-        }
+        return {Statistics.CORRECT: 0, Statistics.INCORRECT: 0}
     else:
         return {
             Statistics.CORRECT: 0,
@@ -97,7 +113,10 @@ def choose_an_item(main):
 
             main.item.english = f"{main.item.english} {random_item.English}"
             main.item.finnish = f"{main.item.finnish} {random_item.Finnish}"
-            main.item.pattern[element] = random_item.Finnish
+            main.item.pattern[element] = {
+                ENGLISH: random_item.English,
+                FINNISH: random_item.Finnish,
+            }
         main.item.english = main.item.english.strip()
         main.item.finnish = main.item.finnish.strip()
 
@@ -157,10 +176,11 @@ def check_answer(main) -> int:
         column_width = int((SCREEN_WIDTH - 2) / 3)
         print_a_message(
             f"{'-' * column_width}<{'CORRECT ANSWER '.center(column_width)}>{'-' * column_width}",
-            border="="
+            border="=",
         )
 
     else:
+        # TODO если один правильный, а другой неправильный
         main.incorrect_answers[main.index] = {Word.ENGLISH: main.item.english}
         main.incorrect_answers[main.index][Word.FINNISH] = expected_answer
         main.incorrect_answers[main.index][Word.INCORRECT] = answer
@@ -179,8 +199,9 @@ def check_answer(main) -> int:
         make_user_write_type_three_times(main)
 
     main.stats[target_stats] += 1
-    update_current_tier(main)
-    remove_current_word_from_snapshot(main)
+    if Statistics.CURRENT_TIER in main.stats:
+        update_current_tier(main)
+    remove_current_item_from_snapshot(main)
 
     return score_delta
 
@@ -208,26 +229,37 @@ def make_user_write_type_three_times(main):
             print(f' [FAILURE] Nope, you need to type "{main.item.finnish}".')
 
 
-def remove_current_word_from_snapshot(main):
+def remove_current_item_from_snapshot(main):
     df = main.snapshot
-    index = find_item_in_db(main, df).index.item()
+    if main.item.item_type == ItemType.COMBINATION:
+        indices = find_item_in_db(main, df)
+    else:
+        indices = [find_item_in_db(main, df)]
 
-    df.drop(index, inplace=True)
+    for index in indices:
+        df.drop(index, inplace=True)
 
 
 def find_item_in_db(main, df: DataFrame):
-    item = None
+    items = None
     word = main.item
     finnish = word.finnish
     english = word.english
 
     if main.item.item_type == ItemType.WORD:
-        item = df.loc[(df.Finnish == finnish) & (df.English == english)]
+        items = df.loc[(df.Finnish == finnish) & (df.English == english)]
     elif main.item.item_type == ItemType.VERB:
-        item = df.loc[df["Verb form"] == main.item.finnish]
+        items = df.loc[df["Verb form"] == main.item.finnish]
+    elif main.item.item_type == ItemType.COMBINATION:
+        items = [
+            df.loc[(df.Finnish == e[FINNISH]) & (df.English == e[ENGLISH])]
+            for e in main.item.pattern.values()
+        ]
 
-    if len(item):
-        return item
+    if len(items) == 1:
+        return items.index.item()
+    elif len(items) > 1:
+        return [item.index.item() for item in items]
     else:
         raise Exception("\n[ERROR] Couldn't find an item in db")
 

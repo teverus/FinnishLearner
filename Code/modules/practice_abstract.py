@@ -23,6 +23,8 @@ from Code.tables.EndRunActionsTable import EndRunActionsTable
 from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 
 
+# TODO можно добавлять артикль
+
 class PracticeAbstract:
     def __init__(
         self,
