@@ -173,19 +173,24 @@ def check_answer(main) -> int:
 
         print(" ")
 
-        column_width = int((SCREEN_WIDTH - 2) / 3)
-        print_a_message(
-            f"{'-' * column_width}<{'CORRECT ANSWER '.center(column_width)}>{'-' * column_width}",
-            border="=",
-        )
+        col_w = int((SCREEN_WIDTH - 2) / 3)
+        label = f"{'-' * col_w}<{'CORRECT ANSWER '.center(col_w)}>{'-' * col_w}"
+        print_a_message(label, border="=")
 
     else:
-        # TODO если один правильный, а другой неправильный
-        main.incorrect_answers[main.index] = {Word.ENGLISH: main.item.english}
-        main.incorrect_answers[main.index][Word.FINNISH] = expected_answer
-        main.incorrect_answers[main.index][Word.INCORRECT] = answer
+
+        main.incorrect_answers[main.index] = {
+            Word.ENGLISH: main.item.english,
+            Word.FINNISH: expected_answer,
+            Word.INCORRECT: answer
+        }
         target_stats = Statistics.INCORRECT
-        score_delta = -1
+
+        if main.item.item_type == ItemType.COMBINATION:
+            # TODO если один правильный, а другой неправильный
+            score_delta = evaluate_answer(main)
+        else:
+            score_delta = -1
 
         user_answer = f', not "{answer}"' if answer else ""
         print("")
@@ -372,3 +377,21 @@ def add_new_verbs(main):
     if added_verbs:
         df = get_all_words(ALL_VERBS)
         df.to_excel(ALL_VERBS, index=False)
+
+
+def evaluate_answer(main):
+    actual_split = main.answer.split()
+    expected_split = main.item.finnish.split()
+    df = main.snapshot
+    score_delta = {}
+
+    for actual, expected in zip(actual_split, expected_split):
+        found_word = df.loc[df.Finnish == actual]
+        if len(found_word) == 1:
+            score_delta[expected] = 1
+        elif len(found_word) == 0:
+            score_delta[expected] = -1
+        else:
+            raise Exception("\n[ERROR] Something is terribly wrong")
+
+    return score_delta

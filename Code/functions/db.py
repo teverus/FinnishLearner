@@ -19,6 +19,7 @@ def update_item_score(main, change: int):
     indices = find_item_in_db(main, df)
     indices = [indices] if not isinstance(indices, list) else indices
     for index in indices:
+        # TODO тут нужно обрабатывать двойную change
         df.loc[index, SCORE] += change
 
     df.sort_values(by=SCORE, kind="mergesort", inplace=True, ignore_index=True)

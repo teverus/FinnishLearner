@@ -58,6 +58,7 @@ class PracticeAbstract:
     def run(self):
         for index in range(1, self.item.per_run + 1):
             self.index = index
+            # TODO предыдущее словосочетание наслаивается
             get_random_item(self)
 
             show_title_head(self)
