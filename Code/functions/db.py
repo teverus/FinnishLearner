@@ -7,13 +7,19 @@ from Code.sentences.grammar_constants import *
 
 
 def update_item_score(main, change: int):
-    # TODO поддержать Combination
-    target_file = {ItemType.WORD: ALL_WORDS, ItemType.VERB: ALL_VERBS}
+    target_file = {
+        ItemType.WORD: ALL_WORDS,
+        ItemType.VERB: ALL_VERBS,
+        ItemType.COMBINATION: ALL_WORDS,
+    }
     target_file = target_file[main.item.item_type]
 
     df = get_all_words(target_file)
 
-    df.loc[find_item_in_db(main, df), SCORE] += change
+    indices = find_item_in_db(main, df)
+    indices = [indices] if not isinstance(indices, list) else indices
+    for index in indices:
+        df.loc[index, SCORE] += change
 
     df.sort_values(by=SCORE, kind="mergesort", inplace=True, ignore_index=True)
 
