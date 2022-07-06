@@ -187,7 +187,6 @@ def check_answer(main) -> int:
         target_stats = Statistics.INCORRECT
 
         if main.item.item_type == ItemType.COMBINATION:
-            # TODO если один правильный, а другой неправильный
             score_delta = evaluate_answer(main)
         else:
             score_delta = -1
@@ -383,14 +382,14 @@ def evaluate_answer(main):
     actual_split = main.answer.split()
     expected_split = main.item.finnish.split()
     df = main.snapshot
-    score_delta = {}
+    score_delta = []
 
     for actual, expected in zip(actual_split, expected_split):
         found_word = df.loc[df.Finnish == actual]
         if len(found_word) == 1:
-            score_delta[expected] = 1
+            score_delta.append(1)
         elif len(found_word) == 0:
-            score_delta[expected] = -1
+            score_delta.append(-1)
         else:
             raise Exception("\n[ERROR] Something is terribly wrong")
 
