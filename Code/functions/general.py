@@ -109,12 +109,14 @@ def choose_an_item(main):
             options = df.loc[(df.PartOfSpeech == element) & (df.Score == lowest_score)]
 
             random_number = random.randint(0, len(options) - 1)
-            i = options.iloc[random_number]
+            random_item = options.iloc[random_number]
 
-            main.item.english = f"{main.item.english} {i.English}"
-            main.item.finnish = f"{main.item.finnish} {i.Finnish}"
+            main.item.english = f"{main.item.english} {random_item.English}"
+            main.item.finnish = f"{main.item.finnish} {random_item.Finnish}"
 
-            main.item.pattern[key].update({ENGLISH: i.English, FINNISH: i.Finnish})
+            main.item.pattern[key].update(
+                {ENGLISH: random_item.English, FINNISH: random_item.Finnish}
+            )
 
         main.item.english = main.item.english.strip()
         main.item.finnish = main.item.finnish.strip()
@@ -141,15 +143,15 @@ def choose_an_item(main):
             break
 
     random_number = random.randint(0, len(items_on_this_tier) - 1)
-    i = items_on_this_tier.iloc[random_number]
+    random_item = items_on_this_tier.iloc[random_number]
 
     if main.item.item_type == ItemType.WORD:
-        main.item.finnish = i.Finnish
-        main.item.english = i.English
+        main.item.finnish = random_item.Finnish
+        main.item.english = random_item.English
 
     elif main.item.item_type == ItemType.VERB:
-        main.item.finnish = i["Verb form"]
-        ri = i
+        main.item.finnish = random_item["Verb form"]
+        ri = random_item
         pronoun = PERSONAL_PRONOUNS[f"{ri.Person} {ri.Plural}"]
         main.item.english = (
             f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense})\n Finnish: {pronoun}"
