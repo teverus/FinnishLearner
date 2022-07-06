@@ -28,7 +28,7 @@ from Code.constants import (
     ALL_VERBS,
 )
 from Code.functions.high_level import get_all_words, save_verb_forms
-from Code.functions.ui import print_a_message
+from Code.functions.ui import print_a_message, do_nothing
 
 
 def get_stats(df: DataFrame, simple=False) -> dict:
@@ -101,22 +101,21 @@ def choose_an_item(main):
     df = main.snapshot
 
     if main.item.item_type == ItemType.COMBINATION:
-        for element in main.item.pattern.keys():
+        for key, value in main.item.pattern.items():
+            element = value["type"]
             df_ = df.loc[df.PartOfSpeech == element].groupby(SCORE).groups.keys()
             lowest_score = sorted(list(df_))[0]
 
             options = df.loc[(df.PartOfSpeech == element) & (df.Score == lowest_score)]
-            options = options.reset_index()
 
             random_number = random.randint(0, len(options) - 1)
-            random_item = options.loc[random_number]
+            i = options.iloc[random_number]
 
-            main.item.english = f"{main.item.english} {random_item.English}"
-            main.item.finnish = f"{main.item.finnish} {random_item.Finnish}"
-            main.item.pattern[element] = {
-                ENGLISH: random_item.English,
-                FINNISH: random_item.Finnish,
-            }
+            main.item.english = f"{main.item.english} {i.English}"
+            main.item.finnish = f"{main.item.finnish} {i.Finnish}"
+
+            main.item.pattern[key].update({ENGLISH: i.English, FINNISH: i.Finnish})
+
         main.item.english = main.item.english.strip()
         main.item.finnish = main.item.finnish.strip()
 
@@ -142,15 +141,15 @@ def choose_an_item(main):
             break
 
     random_number = random.randint(0, len(items_on_this_tier) - 1)
-    random_item = items_on_this_tier.iloc[random_number]
+    i = items_on_this_tier.iloc[random_number]
 
     if main.item.item_type == ItemType.WORD:
-        main.item.finnish = random_item.Finnish
-        main.item.english = random_item.English
+        main.item.finnish = i.Finnish
+        main.item.english = i.English
 
     elif main.item.item_type == ItemType.VERB:
-        main.item.finnish = random_item["Verb form"]
-        ri = random_item
+        main.item.finnish = i["Verb form"]
+        ri = i
         pronoun = PERSONAL_PRONOUNS[f"{ri.Person} {ri.Plural}"]
         main.item.english = (
             f"[{ri.English}] ({ri.Negative}|{ri.Mood}|{ri.Tense})\n Finnish: {pronoun}"
@@ -163,7 +162,7 @@ def advance_current_tier(main):
     main.stats[Statistics.CURRENT_TIER] = next_tier[0]
 
 
-def check_answer(main) -> int:
+def check_answer(main) -> list:
     answer = main.answer
     expected_answer = main.item.finnish
 
@@ -182,7 +181,7 @@ def check_answer(main) -> int:
         main.incorrect_answers[main.index] = {
             Word.ENGLISH: main.item.english,
             Word.FINNISH: expected_answer,
-            Word.INCORRECT: answer
+            Word.INCORRECT: answer,
         }
         target_stats = Statistics.INCORRECT
 
@@ -203,8 +202,7 @@ def check_answer(main) -> int:
         make_user_write_type_three_times(main)
 
     main.stats[target_stats] += 1
-    if Statistics.CURRENT_TIER in main.stats:
-        update_current_tier(main)
+    update_current_tier(main) if Statistics.CURRENT_TIER in main.stats else do_nothing()
     remove_current_item_from_snapshot(main)
 
     return score_delta
@@ -384,8 +382,9 @@ def evaluate_answer(main):
     df = main.snapshot
     score_delta = []
 
-    for actual, expected in zip(actual_split, expected_split):
-        found_word = df.loc[df.Finnish == actual]
+    for index, (actual, expected) in enumerate(zip(actual_split, expected_split)):
+        english = main.item.pattern[index][ENGLISH]
+        found_word = df.loc[(df.Finnish == actual) & (df.English == english)]
         if len(found_word) == 1:
             score_delta.append(1)
         elif len(found_word) == 0:
@@ -394,3 +393,12 @@ def evaluate_answer(main):
             raise Exception("\n[ERROR] Something is terribly wrong")
 
     return score_delta
+
+
+def get_item(main):
+    item = main.item_object(main.items_per_run)
+    item.pattern = (
+        {i: {"type": e} for i, e in enumerate(main.include)} if main.include else None
+    )
+
+    return item

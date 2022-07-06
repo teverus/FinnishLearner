@@ -1,5 +1,5 @@
 from Code.constants import ExitCodes
-from Code.functions.db import update_item_score
+from Code.functions.db import update_item_score_in_db
 from Code.functions.general import (
     get_stats,
     check_if_new_items_should_be_added,
@@ -7,7 +7,7 @@ from Code.functions.general import (
     check_answer,
     get_incorrect_answers,
     exclude_item_types,
-    include_only_items,
+    include_only_items, get_item,
 )
 from Code.functions.high_level import get_all_words
 from Code.functions.ui import (
@@ -24,6 +24,7 @@ from Code.tables.IncorrectAnswersTable import IncorrectAnswersTable
 
 
 # TODO можно добавлять артикль
+
 
 class PracticeAbstract:
     def __init__(
@@ -44,8 +45,10 @@ class PracticeAbstract:
         self.incorrect_answers = {}
         self.result = None
         self.index = None
-        self.item = item_object(items_per_run)
-        self.item.pattern = {key: None for key in include} if include else None
+        self.item_object = item_object
+        self.items_per_run = items_per_run
+        self.include = include
+        self.item = get_item(self)
         self.horizontal_prompt = horizontal_prompt
 
         self.set_up()
@@ -57,8 +60,9 @@ class PracticeAbstract:
 
     def run(self):
         for index in range(1, self.item.per_run + 1):
+            self.item = get_item(self)
+
             self.index = index
-            # TODO предыдущее словосочетание наслаивается
             get_random_item(self)
 
             show_title_head(self)
@@ -70,7 +74,7 @@ class PracticeAbstract:
 
             if answer:
                 score_delta = check_answer(self)
-                update_item_score(self, score_delta)
+                update_item_score_in_db(self, score_delta)
                 input("""\n Press "Enter" to continue...""")
             else:
                 break

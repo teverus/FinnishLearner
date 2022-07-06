@@ -8,7 +8,7 @@ from Code.functions.high_level import get_all_words
 from Code.sentences.grammar_constants import *
 
 
-def update_item_score(main, change: Union[int, list]):
+def update_item_score_in_db(main, change: Union[int, list]):
     target_file = {
         ItemType.WORD: ALL_WORDS,
         ItemType.VERB: ALL_VERBS,
@@ -20,10 +20,9 @@ def update_item_score(main, change: Union[int, list]):
 
     indices = find_item_in_db(main, df)
     indices = [indices] if not isinstance(indices, list) else indices
-    change = [change] if not isinstance(change, list) else change
 
     for answer, index in enumerate(indices):
-        proper_change = change[0] if len(change) == 1 else change[answer]
+        proper_change = change if not isinstance(change, list) else change[answer]
         df.loc[index, SCORE] += proper_change
 
     df.sort_values(by=SCORE, kind="mergesort", inplace=True, ignore_index=True)
