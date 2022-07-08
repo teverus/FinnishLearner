@@ -276,10 +276,10 @@ def get_incorrect_answers(main):
             verb, correct, incorrect = main.incorrect_answers[key].values()
             verb = re.findall(r"\]\s\((.*)\)", verb)[0]
             result = [verb, correct, incorrect]
-        elif main.item.item_type == ItemType.WORD:
+        elif main.item.item_type in [ItemType.WORD, ItemType.COMBINATION]:
             result = list(main.incorrect_answers[key].values())
         else:
-            raise Exception("\n[ERROR] Unknown item_type")
+            raise Exception("\n\n[ERROR] Unknown item_type\n")
 
         incorrect_answers.append(result)
 
