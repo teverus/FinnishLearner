@@ -179,17 +179,29 @@ def check_answer(main) -> list:
         print_a_message(label, border="=")
 
     else:
-
-        main.incorrect_answers[main.index] = {
-            Word.ENGLISH: main.item.english,
-            Word.FINNISH: expected_answer,
-            Word.INCORRECT: answer,
-        }
         target_stats = Statistics.INCORRECT
 
         if main.item.item_type == ItemType.COMBINATION:
             score_delta = evaluate_answer(main)
+            incorrect = {
+                Word.ENGLISH: "",
+                Word.FINNISH: "",
+                Word.INCORRECT: ""
+            }
+            for index, score in enumerate(score_delta):
+                if score == -1:
+                    incorrect[Word.ENGLISH] += main.item.pattern[index][ENGLISH]
+                    incorrect[Word.FINNISH] += main.item.pattern[index][FINNISH]
+                    incorrect[Word.INCORRECT] += answer.split()[index]
+            main.incorrect_answers[main.index] = incorrect
+
         else:
+            main.incorrect_answers[main.index] = {
+                Word.ENGLISH: main.item.english,
+                Word.FINNISH: expected_answer,
+                Word.INCORRECT: answer,
+            }
+
             score_delta = -1
 
         user_answer = f', not "{answer}"' if answer else ""
