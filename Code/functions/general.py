@@ -190,11 +190,17 @@ def check_answer(main) -> list:
             }
             for index, score in enumerate(score_delta):
                 if score == -1:
-                    incorrect[Word.ENGLISH] = f"{incorrect[Word.ENGLISH]} {main.item.pattern[index][ENGLISH]}"
-                    # TODO вот так в каждом
-                    incorrect[Word.FINNISH] += main.item.pattern[index][FINNISH]
-                    incorrect[Word.INCORRECT] += answer.split()[index]
-            # TODO потом надо стрипать строки в incorrect
+                    en = incorrect[Word.ENGLISH]
+                    fi = incorrect[Word.FINNISH]
+                    nc = incorrect[Word.INCORRECT]
+                    ans_en = main.item.pattern[index][ENGLISH]
+                    ans_fi = main.item.pattern[index][FINNISH]
+                    false = answer.split()[index]
+
+                    incorrect[Word.ENGLISH] = ans_en if not en else f"{en} {ans_en}"
+                    incorrect[Word.FINNISH] = ans_fi if not fi else f"{fi} {ans_fi}"
+                    incorrect[Word.INCORRECT] = false if not nc else f"{nc} {false}"
+
             main.incorrect_answers[main.index] = incorrect
 
         else:
