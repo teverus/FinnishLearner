@@ -237,20 +237,24 @@ def update_current_tier(main):
 
 
 def make_user_write_type_three_times(main):
-    print(f' Please type "{main.item.finnish}" and hit "Enter" three times.')
+    if main.item.item_type == ItemType.COMBINATION:
+        proper_answer = main.incorrect_answers[main.index][FINNISH]
+    else:
+        proper_answer = main.item.finnish
+    print(f' Please type "{proper_answer}" and hit "Enter" three times.')
 
     correct_times = 0
     max_times = 3
     while correct_times != max_times:
         user_input = input(" >>> ").replace("a:", "ä").replace("o:", "ö")
-        if user_input == main.item.finnish:
+        if user_input == proper_answer:
             correct_times += 1
             if correct_times == max_times:
                 print(f" [SUCCESS] That's it :) Keep on learning :)")
             else:
                 print(f" [SUCCESS] Yes! {max_times - correct_times} to go!")
         else:
-            print(f' [FAILURE] Nope, you need to type "{main.item.finnish}".')
+            print(f' [FAILURE] Nope, you need to type "{proper_answer}".')
 
 
 def remove_current_item_from_snapshot(main):
