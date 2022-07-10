@@ -183,11 +183,7 @@ def check_answer(main) -> list:
 
         if main.item.item_type == ItemType.COMBINATION:
             score_delta = evaluate_answer(main)
-            incorrect = {
-                Word.ENGLISH: "",
-                Word.FINNISH: "",
-                Word.INCORRECT: ""
-            }
+            incorrect = {Word.ENGLISH: "", Word.FINNISH: "", Word.INCORRECT: ""}
             for index, score in enumerate(score_delta):
                 if score == -1:
                     en = incorrect[Word.ENGLISH]
@@ -203,6 +199,9 @@ def check_answer(main) -> list:
 
             main.incorrect_answers[main.index] = incorrect
 
+            user_answer = f', not "{incorrect[Word.INCORRECT]}"' if answer else ""
+            expected_answer = incorrect[Word.FINNISH]
+
         else:
             main.incorrect_answers[main.index] = {
                 Word.ENGLISH: main.item.english,
@@ -212,7 +211,8 @@ def check_answer(main) -> list:
 
             score_delta = -1
 
-        user_answer = f', not "{answer}"' if answer else ""
+            user_answer = f', not "{answer}"' if answer else ""
+
         print("")
         print_a_message(
             f"""Sorry, it's "{expected_answer}"{user_answer}""",
