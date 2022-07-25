@@ -213,9 +213,19 @@ def check_answer(main) -> list:
 
             user_answer = f', not "{answer}"' if answer else ""
 
+        if main.item.item_type == ItemType.VERB:
+            inf_en = re.findall(r"\[(.*)\]", main.item.english)
+            assert len(inf_en) == 1, "\n[ERROR] Couldn't parse infinitive"
+            inf_en = inf_en[0]
+            df = main.snapshot
+            inf_fi = df.loc[df.English == inf_en].Infinitive.values[0]
+            inf_fi = f" [{inf_fi}]"
+        else:
+            inf_fi = ""
+
         print("")
         print_a_message(
-            f"""Sorry, it's "{expected_answer}"{user_answer}""",
+            f"""Sorry, it's "{expected_answer}"{user_answer}{inf_fi}""",
             border="~",
             centered=True,
         )
@@ -408,6 +418,7 @@ def evaluate_answer(main):
     df = main.snapshot
     score_delta = []
 
+    # TODO ! Если len(actual_split) != expected_split
     for index, (actual, expected) in enumerate(zip(actual_split, expected_split)):
         english = main.item.pattern[index][ENGLISH]
         found_word = df.loc[(df.Finnish == actual) & (df.English == english)]
