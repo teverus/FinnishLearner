@@ -413,12 +413,16 @@ def add_new_verbs(main):
 
 
 def evaluate_answer(main):
-    actual_split = main.answer.split()
     expected_split = main.item.finnish.split()
+    target_length = len(expected_split)
+
+    actual_split = main.answer.split()
+    if len(actual_split) != target_length:
+        [actual_split.append("") for _ in range(target_length - len(actual_split))]
+
     df = main.snapshot
     score_delta = []
 
-    # TODO ! Если len(actual_split) != expected_split
     for index, (actual, expected) in enumerate(zip(actual_split, expected_split)):
         english = main.item.pattern[index][ENGLISH]
         found_word = df.loc[(df.Finnish == actual) & (df.English == english)]
