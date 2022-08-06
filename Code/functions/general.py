@@ -191,7 +191,10 @@ def check_answer(main) -> list:
                     nc = incorrect[Word.INCORRECT]
                     ans_en = main.item.pattern[index][ENGLISH]
                     ans_fi = main.item.pattern[index][FINNISH]
-                    false = answer.split()[index]
+                    try:
+                        false = answer.split()[index]
+                    except IndexError:
+                        false = ""
 
                     incorrect[Word.ENGLISH] = ans_en if not en else f"{en} {ans_en}"
                     incorrect[Word.FINNISH] = ans_fi if not fi else f"{fi} {ans_fi}"
